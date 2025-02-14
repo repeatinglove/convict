@@ -165,8 +165,8 @@
     function Particle() {
       this.x = Math.random() * canvas.width;
       this.y = Math.random() * canvas.height;
-      this.size = Math.random() * 3 + 1;
-      this.speedY = Math.random() * 0.5 + 0.3;
+      this.size = Math.random() * 2 + 1;
+      this.speedY = Math.random() * 0.3 + 0.3;
       this.opacity = Math.random() * 0.3 + 0.2;
       this.update = function() {
         this.y += this.speedY;
@@ -189,13 +189,13 @@
       requestAnimationFrame(animate);
     }
 
-    for (let i = 0; i < 70; i++) {
+    for (let i = 0; i < 55; i++) {
       particles.push(new Particle());
     }
     animate();
 
     // Change the title every 2 seconds
-    let titles = ["repeating love", "<3", "convict"];
+    let titles = ["repeating love", "lex <3", "convict"];
     let titleIndex = 0;
     setInterval(() => {
       document.title = titles[titleIndex];
@@ -204,13 +204,10 @@
 
     // Audio Playlist Data
     const audioFiles = [
-      { url: 'https://files.catbox.moe/yrm9az.mp3', title: 'Song 1' },
-      { url: 'https://files.catbox.moe/wjmfkk.mp3', title: 'Song 2' },
-      { url: 'https://files.catbox.moe/i9w869.mp3', title: 'Song 3' },
-      { url: 'https://files.catbox.moe/2jb8xp.mp3', title: 'Song 4' },
-      { url: 'https://files.catbox.moe/hs53v3.mp3', title: 'Song 5' },
-      { url: 'https://files.catbox.moe/atd2c5.mp3', title: 'Song 6' },
-	  { url: 'https://files.catbox.moe/z24fq0.mp3', title: 'Song 7' },
+      { url: 'https://files.catbox.moe/wjmfkk.mp3', title: 'Song 1' },
+      { url: 'https://files.catbox.moe/2jb8xp.mp3', title: 'Song 2' },
+      { url: 'https://files.catbox.moe/atd2c5.mp3', title: 'Song 3' },
+	  { url: 'https://files.catbox.moe/z24fq0.mp3', title: 'Song 4' },
     ];
 
     let currentTrack = Math.floor(Math.random() * audioFiles.length);
@@ -228,14 +225,6 @@
       playNextTrack();
     });
 
-    document.getElementById('profileImage').onclick = function () {
-      const newImage = prompt('Enter the new profile picture URL:');
-      if (newImage) this.src = newImage;
-    };
-
-    const profileBox = document.getElementById('profileBox');
-    let tiltX = 0;
-
     document.addEventListener('mousemove', function(e) {
       const x = e.clientX;
       const boxCenterX = window.innerWidth / 2;
@@ -248,7 +237,7 @@
     });
 
     const textEffect = document.getElementById('textEffect');
-    const phrases = ["repeating love", "I love her sm"];
+    const phrases = ["fuck everyone", "my sweet girl lex"];
     let currentPhraseIndex = 0;
     let currentCharIndex = 0;
     let isDeleting = false;
