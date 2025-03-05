@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -50,7 +50,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(10, 10, 10, 0.7); /* More transparent */
+      background: rgba(10, 10, 10, 0.7);
       padding: 30px;
       border-radius: 16px;
       width: 300px;
@@ -123,8 +123,8 @@
     /* Particle Styles */
     .particle {
       position: absolute;
-      width: 5px;
-      height: 5px;
+      width: 3px; /* Smaller dots */
+      height: 3px;
       background-color: white;
       border-radius: 50%;
       opacity: 0.8;
@@ -198,7 +198,7 @@
 
     // Falling Particles
     function createParticle() {
-      if (document.getElementsByClassName('particle').length < 10) {
+      if (document.getElementsByClassName('particle').length < 10) { // Fewer particles
         const particle = document.createElement("div");
         particle.classList.add("particle");
         document.body.appendChild(particle);
@@ -215,7 +215,7 @@
       }
     }
 
-    setInterval(createParticle, 500); // Controls particle frequency
+    setInterval(createParticle, 1000); // Less frequent spawns
 
     // Background Music
     const audio = new Audio("https://files.catbox.moe/wjmfkk.mp3");
