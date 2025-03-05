@@ -25,13 +25,6 @@
       background-color: #020202;
     }
 
-    canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-    }
-
     .intro-screen {
       position: fixed;
       width: 100%;
@@ -41,13 +34,13 @@
       align-items: center;
       justify-content: center;
       z-index: 10;
+      cursor: pointer;
     }
 
     .intro-text {
       font-size: 14px;
       color: rgba(255, 255, 255, 0.6);
       text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
-      cursor: pointer;
       transition: opacity 0.3s;
       font-weight: 300;
     }
@@ -57,11 +50,10 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(10, 10, 10, 0.9);
-      padding: 20px;
+      background: rgba(10, 10, 10, 0.7); /* More transparent */
+      padding: 30px;
       border-radius: 16px;
-      width: 220px;
-      height: auto;
+      width: 300px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -71,22 +63,22 @@
     }
 
     .profile-img {
-      width: 80px;
-      height: 80px;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       object-fit: cover;
     }
 
     h1 {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 300;
       margin-bottom: 10px;
     }
 
     p {
       margin: 4px 0;
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 300;
     }
 
@@ -103,8 +95,8 @@
       text-decoration: none;
       color: white;
       border-radius: 50%;
-      width: 36px;
-      height: 36px;
+      width: 40px;
+      height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -118,29 +110,47 @@
     }
 
     .btn i {
-      font-size: 20px;
+      font-size: 22px;
     }
 
     .typing-effect {
       display: inline-block;
       font-weight: 300;
-      font-size: 14px; /* Smaller text size */
-      margin-top: 10px; /* Added margin-top to add spacing */
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    /* Particle Styles */
+    .particle {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background-color: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      from {
+        transform: translateY(-10px);
+      }
+      to {
+        transform: translateY(100vh);
+      }
     }
   </style>
 </head>
 
 <body>
   <div class="intro-screen" id="introScreen">
-    <p class="intro-text" id="introText">click anywhere.</p>
+    <p class="intro-text">click to enter</p>
   </div>
 
-  <canvas id="snowCanvas"></canvas>
-
   <div class="profile-container" id="profileBox">
-    <img src="https://files.catbox.moe/i95kyb.jpg" alt="Profile Picture" class="profile-img" id="profileImage">
+    <img src="https://files.catbox.moe/8vdju6.png" alt="Profile Picture" class="profile-img">
     <h1>convict</h1>
-    <p class="typing-effect" id="textEffect"></p>
+    <p class="typing-effect" id="bioEffect"></p>
     <div class="button-container">
       <a class="btn" href="https://discord.com/users/1050643297527418910" target="_blank">
         <i class="fab fa-discord"></i>
@@ -151,125 +161,68 @@
     </div>
   </div>
 
-  <!-- Audio Player -->
-  <audio id="background-audio" loop></audio>
-
   <script>
-    // Particle Effect (Snowfall)
-    const canvas = document.getElementById('snowCanvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    let particles = [];
-    function Particle() {
-      this.x = Math.random() * canvas.width;
-      this.y = Math.random() * canvas.height;
-      this.size = Math.random() * 2 + 1;
-      this.speedY = Math.random() * 0.3 + 0.3;
-      this.opacity = Math.random() * 0.3 + 0.2;
-      this.update = function() {
-        this.y += this.speedY;
-        if (this.y > canvas.height) {
-          this.y = -this.size;
-          this.x = Math.random() * canvas.width;
-        }
-        ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-      };
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach((particle) => {
-        particle.update();
-      });
-      requestAnimationFrame(animate);
-    }
-
-    for (let i = 0; i < 55; i++) {
-      particles.push(new Particle());
-    }
-    animate();
-
-    // Change the title every 2 seconds
-    let titles = ["repeating love", "lex <3", "convict"];
-    let titleIndex = 0;
-    setInterval(() => {
-      document.title = titles[titleIndex];
-      titleIndex = (titleIndex + 1) % titles.length;
-    }, 2000);
-
-    // Audio Playlist Data
-    const audioFiles = [
-      { url: 'https://files.catbox.moe/wjmfkk.mp3', title: 'Song 1' },
-      { url: 'https://files.catbox.moe/2jb8xp.mp3', title: 'Song 2' },
-      { url: 'https://files.catbox.moe/atd2c5.mp3', title: 'Song 3' },
-	  { url: 'https://files.catbox.moe/z24fq0.mp3', title: 'Song 4' },
-    ];
-
-    let currentTrack = Math.floor(Math.random() * audioFiles.length);
-    const audio = document.getElementById('background-audio');
-
-    function playNextTrack() {
-      audio.src = audioFiles[currentTrack].url;
-      audio.play().catch(error => console.log("Autoplay blocked, user interaction required"));
-      currentTrack = (currentTrack + 1) % audioFiles.length;  // Cycle through tracks
-    }
-
     document.getElementById("introScreen").addEventListener("click", function() {
       this.style.display = "none";
-      document.getElementById('profileBox').style.display = 'block';
-      playNextTrack();
+      document.getElementById("profileBox").style.display = "flex";
     });
 
-    document.addEventListener('mousemove', function(e) {
-      const x = e.clientX;
-      const boxCenterX = window.innerWidth / 2;
-      tiltX = (x - boxCenterX) / 50;
-      profileBox.style.transform = `translate(-50%, -50%) rotateY(${tiltX}deg)`;
-    });
-
-    document.addEventListener('mouseleave', function() {
-      profileBox.style.transform = 'translate(-50%, -50%) rotateY(0deg)';
-    });
-
-    const textEffect = document.getElementById('textEffect');
-    const phrases = ["fuck everyone", "repeating love" , "I love her"];
-    let currentPhraseIndex = 0;
-    let currentCharIndex = 0;
+    // Typing Effect for Bio
+    const bioText = ["I hate everything", "lex my love"];
+    let bioIndex = 0;
+    let bioCharIndex = 0;
     let isDeleting = false;
+    const bioElement = document.getElementById('bioEffect');
 
-    function typeEffect() {
-      const currentPhrase = phrases[currentPhraseIndex];
-      
+    function typeBio() {
+      const currentText = bioText[bioIndex];
       if (isDeleting) {
-        textEffect.textContent = currentPhrase.substring(0, currentCharIndex - 1);
-        currentCharIndex--;
-
-        if (currentCharIndex <= 0) {
-          isDeleting = false;
-          currentPhraseIndex = (currentPhraseIndex + 1) % phrases.length;
-          setTimeout(typeEffect, 1000); // Wait 1 second before backspacing
-        } else {
-          setTimeout(typeEffect, 50);
-        }
+        bioElement.textContent = currentText.substring(0, bioCharIndex - 1);
+        bioCharIndex--;
       } else {
-        textEffect.textContent = currentPhrase.substring(0, currentCharIndex + 1);
-        currentCharIndex++;
+        bioElement.textContent = currentText.substring(0, bioCharIndex + 1);
+        bioCharIndex++;
+      }
 
-        if (currentCharIndex === currentPhrase.length) {
-          isDeleting = true;
-          setTimeout(typeEffect, 1000); // Wait 1 second after finishing typing
-        } else {
-          setTimeout(typeEffect, 100);
-        }
+      if (!isDeleting && bioCharIndex === currentText.length) {
+        setTimeout(() => { isDeleting = true; }, 1000); // Pause before deleting
+      } else if (isDeleting && bioCharIndex === 0) {
+        isDeleting = false;
+        bioIndex = (bioIndex + 1) % bioText.length;
+      }
+
+      setTimeout(typeBio, isDeleting ? 50 : 100);
+    }
+
+    typeBio();
+
+    // Falling Particles
+    function createParticle() {
+      if (document.getElementsByClassName('particle').length < 10) {
+        const particle = document.createElement("div");
+        particle.classList.add("particle");
+        document.body.appendChild(particle);
+
+        const startX = Math.random() * window.innerWidth;
+        const duration = Math.random() * 5 + 5; // Slower falling speed
+
+        particle.style.left = `${startX}px`;
+        particle.style.animationDuration = `${duration}s`;
+
+        particle.addEventListener("animationend", () => {
+          particle.remove();
+        });
       }
     }
 
-    typeEffect();
+    setInterval(createParticle, 500); // Controls particle frequency
+
+    // Background Music
+    const audio = new Audio("https://files.catbox.moe/wjmfkk.mp3");
+    audio.loop = true;
+    document.getElementById("introScreen").addEventListener("click", function () {
+      audio.play().catch(err => console.log("Autoplay blocked"));
+    });
   </script>
 </body>
 </html>
