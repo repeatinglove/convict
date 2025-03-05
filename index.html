@@ -223,6 +223,16 @@
     document.getElementById("introScreen").addEventListener("click", function () {
       audio.play().catch(err => console.log("Autoplay blocked"));
     });
+
+    // Title Switching with Loop
+    const titles = ["convict", "<3", "wtf", ":3"];
+    let titleIndex = 0;
+
+    // Change the title continuously
+    setInterval(() => {
+      document.title = titles[titleIndex];
+      titleIndex = (titleIndex + 1) % titles.length; // Reset to 0 after ":3"
+    }, 500); // Change every 500ms
   </script>
 </body>
 </html>
