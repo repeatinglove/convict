@@ -1,130 +1,37 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>repeating love</title>
-
+  <title>Electric Web</title>
   <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/js/all.min.js"></script>
-
-  <!-- Importing JMH Typewriter Font -->
   <link href="https://fonts.googleapis.com/css2?family=JMH+Typewriter&display=swap" rel="stylesheet">
-
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'JMH Typewriter', monospace;
-      color: white;
-      text-align: center;
-      overflow: hidden;
-      background-color: #020202;
-    }
-
-    .intro-screen {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.95);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-      cursor: pointer;
-    }
-
-    .intro-text {
-      font-size: 14px;
-      color: rgba(255, 255, 255, 0.6);
-      text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
-      transition: opacity 0.3s;
-      font-weight: 300;
-    }
-
-    .profile-container {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(10, 10, 10, 0.7);
-      padding: 30px;
-      border-radius: 16px;
-      width: 300px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.4);
-      display: none;
-      z-index: 5;
-    }
-
-    .profile-img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      margin-bottom: 10px;
-      object-fit: cover;
-    }
-
-    h1 {
-      font-size: 18px;
-      font-weight: 300;
-      margin-bottom: 10px;
-    }
-
-    p {
-      margin: 4px 0;
-      font-size: 14px;
-      font-weight: 300;
-    }
-
-    .button-container {
-      margin-top: 30px;
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .btn {
-      background: #333333;
-      padding: 6px;
-      text-decoration: none;
-      color: white;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'JMH Typewriter', monospace; color: white; text-align: center; overflow: hidden; background-color: #020202; }
+    .intro-screen { position: fixed; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); display: flex; align-items: center; justify-content: center; z-index: 10; cursor: pointer; }
+    .intro-text { font-size: 14px; color: rgba(255, 255, 255, 0.6); text-shadow: 0 0 15px rgba(255, 255, 255, 0.8); transition: opacity 0.3s; font-weight: 300; }
+    .profile-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(10, 10, 10, 0.7); padding: 30px; border-radius: 16px; width: 300px; display: flex; flex-direction: column; align-items: center; box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.4); display: none; z-index: 5; }
+    .profile-img { width: 100px; height: 100px; border-radius: 50%; margin-bottom: 10px; object-fit: cover; }
+    h1 { font-size: 18px; font-weight: 300; margin-bottom: 10px; }
+    p { margin: 4px 0; font-size: 14px; font-weight: 300; }
+    .button-container { margin-top: 30px; display: flex; justify-content: center; gap: 8px; }
+    .btn { background: #333333; padding: 6px; text-decoration: none; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; transition: background 0.2s ease-in-out, box-shadow 0.2s ease-in-out; }
     .btn:hover {
       background: #555555;
-      box-shadow: 0px 6px 15px rgba(255, 255, 255, 0.8);
+      box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.6), 0 0 20px rgba(255, 255, 255, 0.6);
       transform: scale(1.1);
     }
-
-    .btn i {
-      font-size: 22px;
-    }
-
-    .typing-effect {
-      display: inline-block;
-      font-weight: 300;
-      font-size: 14px;
-      margin-top: 10px;
-    }
-
-    /* Particle Styles */
+    .btn i { font-size: 22px; }
+    .typing-effect { display: inline-block; font-weight: 300; font-size: 14px; margin-top: 10px; }
+    canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+    
+    /* Falling particles styling */
     .particle {
       position: absolute;
-      width: 3px; /* Smaller dots */
-      height: 3px;
+      top: -50px;
+      width: 5px; /* Smaller size */
+      height: 5px; /* Smaller size */
       background-color: white;
       border-radius: 50%;
       opacity: 0.8;
@@ -132,23 +39,21 @@
     }
 
     @keyframes fall {
-      from {
-        transform: translateY(-10px);
-      }
       to {
-        transform: translateY(100vh);
+        transform: translateY(calc(100vh + 50px));
+        opacity: 0;
       }
     }
   </style>
 </head>
-
 <body>
+
   <div class="intro-screen" id="introScreen">
     <p class="intro-text">click to enter</p>
   </div>
 
   <div class="profile-container" id="profileBox">
-    <img src="https://files.catbox.moe/8vdju6.png" alt="Profile Picture" class="profile-img">
+    <img src="https://files.catbox.moe/itog73.jpg" alt="Profile Picture" class="profile-img">
     <h1>convict</h1>
     <p class="typing-effect" id="bioEffect"></p>
     <div class="button-container">
@@ -160,6 +65,8 @@
       </a>
     </div>
   </div>
+
+  <canvas id="electricCanvas"></canvas>
 
   <script>
     document.getElementById("introScreen").addEventListener("click", function() {
@@ -198,7 +105,7 @@
 
     // Falling Particles
     function createParticle() {
-      if (document.getElementsByClassName('particle').length < 10) { // Fewer particles
+      if (document.getElementsByClassName('particle').length < 3) { // Fewer particles
         const particle = document.createElement("div");
         particle.classList.add("particle");
         document.body.appendChild(particle);
@@ -234,5 +141,6 @@
       titleIndex = (titleIndex + 1) % titles.length; // Reset to 0 after ":3"
     }, 500); // Change every 500ms
   </script>
+
 </body>
 </html>
