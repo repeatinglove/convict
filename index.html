@@ -1,146 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Electric Web</title>
-  <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/js/all.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=JMH+Typewriter&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'JMH Typewriter', monospace; color: white; text-align: center; overflow: hidden; background-color: #020202; }
-    .intro-screen { position: fixed; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); display: flex; align-items: center; justify-content: center; z-index: 10; cursor: pointer; }
-    .intro-text { font-size: 14px; color: rgba(255, 255, 255, 0.6); text-shadow: 0 0 15px rgba(255, 255, 255, 0.8); transition: opacity 0.3s; font-weight: 300; }
-    .profile-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(10, 10, 10, 0.7); padding: 30px; border-radius: 16px; width: 300px; display: flex; flex-direction: column; align-items: center; box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.4); display: none; z-index: 5; }
-    .profile-img { width: 100px; height: 100px; border-radius: 50%; margin-bottom: 10px; object-fit: cover; }
-    h1 { font-size: 18px; font-weight: 300; margin-bottom: 10px; }
-    p { margin: 4px 0; font-size: 14px; font-weight: 300; }
-    .button-container { margin-top: 30px; display: flex; justify-content: center; gap: 8px; }
-    .btn { background: #333333; padding: 6px; text-decoration: none; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; transition: background 0.2s ease-in-out, box-shadow 0.2s ease-in-out; }
-    .btn:hover {
-      background: #555555;
-      box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.6), 0 0 20px rgba(255, 255, 255, 0.6);
-      transform: scale(1.1);
-    }
-    .btn i { font-size: 22px; }
-    .typing-effect { display: inline-block; font-weight: 300; font-size: 14px; margin-top: 10px; }
-    canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-    
-    /* Falling particles styling */
-    .particle {
-      position: absolute;
-      top: -50px;
-      width: 5px; /* Smaller size */
-      height: 5px; /* Smaller size */
-      background-color: white;
-      border-radius: 50%;
-      opacity: 0.8;
-      animation: fall linear infinite;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @font-face {
+            font-family: 'VCR OSD Mono';
+            src: url('https://fonts.cdnfonts.com/s/14798/VCR_OSD_MONO_1.001[1].woff') format('woff');
+        }
 
-    @keyframes fall {
-      to {
-        transform: translateY(calc(100vh + 50px));
-        opacity: 0;
-      }
-    }
-  </style>
+        body {
+            background: linear-gradient(to bottom, #1a1a1a, #0d0d0d);
+            color: white;
+            font-family: 'VCR OSD Mono', monospace;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Disable scrolling */
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 120px;
+        }
+
+        .doll {
+            position: absolute;
+            top: 0px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90px;
+            animation: swing 5s ease-in-out infinite;
+            transform-origin: top center;
+            filter: grayscale(100%) contrast(120%) brightness(80%); /* Gothic black & gray effect */
+        }
+
+        @keyframes swing {
+            0% { transform: translateX(-50%) rotate(5deg); }
+            50% { transform: translateX(-50%) rotate(-5deg); }
+            100% { transform: translateX(-50%) rotate(5deg); }
+        }
+
+        .profile {
+            margin-top: 220px;
+        }
+
+        .profile img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid gray;
+        }
+
+        .socials {
+            margin-top: 10px;
+        }
+
+        .btn {
+            color: white;
+            font-size: 24px;
+            margin: 5px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            color: gray;
+        }
+
+        .domains {
+            margin-top: 40px;
+            font-size: 15px;
+        }
+
+        .domains p {
+            margin: 5px 0;
+        }
+
+        .domain-link {
+            color: red;
+            text-decoration: none;
+        }
+
+        .domain-link:hover {
+            text-decoration: underline;
+        }
+
+        .snow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .typing {
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 2px solid white;
+            font-size: 15px;
+        }
+    </style>
 </head>
 <body>
 
-  <div class="intro-screen" id="introScreen">
-    <p class="intro-text">click to enter</p>
-  </div>
+    <img src="https://files.catbox.moe/vjizjl.png" alt="Hanging Doll" class="doll"> 
 
-  <div class="profile-container" id="profileBox">
-    <img src="https://files.catbox.moe/itog73.jpg" alt="Profile Picture" class="profile-img">
-    <h1>convict</h1>
-    <p class="typing-effect" id="bioEffect"></p>
-    <div class="button-container">
-      <a class="btn" href="https://discord.com/users/1050643297527418910" target="_blank">
-        <i class="fab fa-discord"></i>
-      </a>
-      <a class="btn" href="https://www.tiktok.com/@euphoniousy" target="_blank">
-        <i class="fab fa-tiktok"></i>
-      </a>
+    <div class="container">
+        <div class="profile">
+            <img src="https://files.catbox.moe/wl69vn.jpg" alt="Profile Picture">
+            <p>convict</p>
+            <p>Anti-Extortion ✖ Developer</p>
+            <div class="socials">
+                <a class="btn" href="https://discord.com/users/1050643297527418910" target="_blank">
+                    <i class="fab fa-discord"></i>
+                </a>
+                <a class="btn" href="https://www.tiktok.com/@euphoniousy" target="_blank">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="domains">
+            <p id="typing-text" class="typing"></p>
+            <p>The current active domain(s) are:</p>
+            <p><a href="https://convict.wtf" target="_blank" class="domain-link">convict.wtf</a></p>
+            <p><a href="https://convict.lol" target="_blank" class="domain-link">convict.lol</a></p>
+            <p><a href="https://convict.site" target="_blank" class="domain-link">convict.site</a></p>
+        </div>
     </div>
-  </div>
 
-  <canvas id="electricCanvas"></canvas>
+    <canvas class="snow"></canvas>
 
-  <script>
-    document.getElementById("introScreen").addEventListener("click", function() {
-      this.style.display = "none";
-      document.getElementById("profileBox").style.display = "flex";
-    });
+    <!-- Background Audio with Play Fix -->
+    <audio id="bg-music" loop>
+        <source src="https://files.catbox.moe/luenkf.mp3" type="audio/mpeg">
+    </audio>
 
-    // Typing Effect for Bio
-    const bioText = ["I hate everything", "lex my love"];
-    let bioIndex = 0;
-    let bioCharIndex = 0;
-    let isDeleting = false;
-    const bioElement = document.getElementById('bioEffect');
-
-    function typeBio() {
-      const currentText = bioText[bioIndex];
-      if (isDeleting) {
-        bioElement.textContent = currentText.substring(0, bioCharIndex - 1);
-        bioCharIndex--;
-      } else {
-        bioElement.textContent = currentText.substring(0, bioCharIndex + 1);
-        bioCharIndex++;
-      }
-
-      if (!isDeleting && bioCharIndex === currentText.length) {
-        setTimeout(() => { isDeleting = true; }, 1000); // Pause before deleting
-      } else if (isDeleting && bioCharIndex === 0) {
-        isDeleting = false;
-        bioIndex = (bioIndex + 1) % bioText.length;
-      }
-
-      setTimeout(typeBio, isDeleting ? 50 : 100);
-    }
-
-    typeBio();
-
-    // Falling Particles
-    function createParticle() {
-      if (document.getElementsByClassName('particle').length < 3) { // Fewer particles
-        const particle = document.createElement("div");
-        particle.classList.add("particle");
-        document.body.appendChild(particle);
-
-        const startX = Math.random() * window.innerWidth;
-        const duration = Math.random() * 5 + 5; // Slower falling speed
-
-        particle.style.left = `${startX}px`;
-        particle.style.animationDuration = `${duration}s`;
-
-        particle.addEventListener("animationend", () => {
-          particle.remove();
+    <script>
+        // Ensures Audio Plays on Interaction
+        document.addEventListener("click", function() {
+            const music = document.getElementById("bg-music");
+            if (music.paused) {
+                music.play().catch(error => console.log("Audio play blocked: ", error));
+            }
         });
-      }
-    }
+    </script>
 
-    setInterval(createParticle, 1000); // Less frequent spawns
-	
-    // Background Music
-    const audio = new Audio("https://files.catbox.moe/wjmfkk.mp3");
-    audio.loop = true;
-    document.getElementById("introScreen").addEventListener("click", function () {
-      audio.play().catch(err => console.log("Autoplay blocked"));
-    });
+    <script>
+        // Title Switching with Loop
+        const titles = ["convict", "<3", "wtf", ":3"];
+        let titleIndex = 0;
 
-    // Title Switching with Loop
-    const titles = ["convict", "<3", "wtf", ":3"];
-    let titleIndex = 0;
+        setInterval(() => {
+            document.title = titles[titleIndex];
+            titleIndex = (titleIndex + 1) % titles.length;
+        }, 250);
 
-    // Change the title continuously
-    setInterval(() => {
-      document.title = titles[titleIndex];
-      titleIndex = (titleIndex + 1) % titles.length; // Reset to 0 after ":3"
-    }, 500); // Change every 500ms
-  </script>
+        const canvas = document.querySelector(".snow");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 100;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.radius = Math.random() * 2 + 1;
+                this.speed = Math.random() * 0.5 + 0.2;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+
+            update() {
+                this.y += this.speed;
+                if (this.y > canvas.height) {
+                    this.y = 0;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((particle) => {
+                particle.update();
+                particle.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Typing effect with multiple bios
+        const bios = [
+            "I am the best at everything I do.",
+            "fuck all you harmless niggas.",
+            "I wil always be better than you.",
+            "I love you so much lex.",
+        ];
+        let bioIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typingElement = document.getElementById("typing-text");
+
+        function typeEffect() {
+            const currentText = bios[bioIndex];
+
+            if (isDeleting) {
+                typingElement.textContent = currentText.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingElement.textContent = currentText.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            if (!isDeleting && charIndex === currentText.length) {
+                setTimeout(() => { isDeleting = true; }, 1000);
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                bioIndex = (bioIndex + 1) % bios.length;
+            }
+
+            setTimeout(typeEffect, isDeleting ? 50 : 100);
+        }
+
+        typeEffect();
+    </script>
 
 </body>
 </html>
