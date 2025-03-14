@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Profile</title>
+    <title>convict</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @font-face {
-            font-family: 'VCR OSD Mono';
-            src: url('https://fonts.cdnfonts.com/s/14798/VCR_OSD_MONO_1.001[1].woff') format('woff');
+            font-family: 'JMH Typewriter';
+            src: url('https://fonts.cdnfonts.com/s/17183/JMHTypewriter-Regular.woff2') format('woff2');
         }
 
         body {
             background: linear-gradient(to bottom, #1a1a1a, #0d0d0d);
             color: white;
-            font-family: 'VCR OSD Mono', monospace;
+            font-family: 'JMH Typewriter', monospace;
             text-align: center;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Disable scrolling */
+            overflow: hidden;
         }
 
         .container {
@@ -40,7 +40,7 @@
             width: 90px;
             animation: swing 5s ease-in-out infinite;
             transform-origin: top center;
-            filter: grayscale(100%) contrast(120%) brightness(80%); /* Gothic black & gray effect */
+            filter: grayscale(100%) contrast(120%) brightness(80%);
         }
 
         @keyframes swing {
@@ -86,7 +86,7 @@
         }
 
         .domain-link {
-            color: red;
+            color: white;
             text-decoration: none;
         }
 
@@ -119,8 +119,8 @@
     <div class="container">
         <div class="profile">
             <img src="https://files.catbox.moe/wl69vn.jpg" alt="Profile Picture">
-            <p>convict</p>
-            <p>Anti-Extortion ✖ Developer</p>
+            <p>Convict</p>
+            <p>Developer</p>
             <div class="socials">
                 <a class="btn" href="https://discord.com/users/1050643297527418910" target="_blank">
                     <i class="fab fa-discord"></i>
@@ -133,40 +133,39 @@
 
         <div class="domains">
             <p id="typing-text" class="typing"></p>
-            <p>The current active domain(s) are:</p>
-            <p><a href="https://convict.wtf" target="_blank" class="domain-link">convict.wtf</a></p>
-            <p><a href="https://convict.lol" target="_blank" class="domain-link">convict.lol</a></p>
+            <p>The current active domains are:</p>
             <p><a href="https://convict.site" target="_blank" class="domain-link">convict.site</a></p>
+            <p><a href="https://convict.lol" target="_blank" class="domain-link">convict.lol</a></p>
+            <p><a href="https://convict.wtf" target="_blank" class="domain-link">convict.wtf</a></p>
         </div>
     </div>
 
     <canvas class="snow"></canvas>
 
-    <!-- Background Audio with Play Fix -->
+    <!-- Background Audio -->
     <audio id="bg-music" loop>
         <source src="https://files.catbox.moe/luenkf.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        // Ensures Audio Plays on Interaction
+        // Ensure Audio Plays on User Interaction
         document.addEventListener("click", function() {
             const music = document.getElementById("bg-music");
             if (music.paused) {
                 music.play().catch(error => console.log("Audio play blocked: ", error));
             }
         });
-    </script>
 
-    <script>
         // Title Switching with Loop
-        const titles = ["convict", "<3", "wtf", ":3"];
+        const titles = ["convict", "<3", "wtf", ":3", "niggers"];
         let titleIndex = 0;
 
         setInterval(() => {
             document.title = titles[titleIndex];
             titleIndex = (titleIndex + 1) % titles.length;
-        }, 250);
+        }, 100);
 
+        // Snow Effect
         const canvas = document.querySelector(".snow");
         const ctx = canvas.getContext("2d");
 
@@ -216,12 +215,11 @@
 
         animate();
 
-        // Typing effect with multiple bios
+        // Typing Effect
         const bios = [
             "I am the best at everything I do.",
-            "fuck all you harmless niggas.",
-            "I wil always be better than you.",
-            "I love you so much lex.",
+            "I will always be better than you.",
+            "I love you so much lex."
         ];
         let bioIndex = 0;
         let charIndex = 0;
