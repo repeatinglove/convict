@@ -1,329 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>convict</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        @font-face {
-            font-family: 'JMH Typewriter';
-            src: url('https://fonts.cdnfonts.com/s/17183/JMHTypewriter-Regular.woff2') format('woff2');
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>×</title>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background-color: #000; /* Black background */
+    }
 
-        body {
-            background: linear-gradient(to bottom, #000000, #000000);
-            color: white;
-            font-family: 'JMH Typewriter', monospace;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
+    /* Swinging doll */
+    .doll {
+      position: absolute;
+      top: 0%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px; /* Adjust size of the doll */
+      animation: swing 3s ease-in-out infinite;
+      transform-origin: top center;
+      filter: grayscale(100%) contrast(120%) brightness(80%);
+    }
 
-        .container {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding-top: 120px;
-            z-index: 10;
-        }
+    /* Swing animation */
+    @keyframes swing {
+      0% { transform: translateX(-50%) rotate(5deg); }
+      50% { transform: translateX(-50%) rotate(-5deg); }
+      100% { transform: translateX(-50%) rotate(5deg); }
+    }
 
-        .doll {
-            position: absolute;
-            top: 0px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90px;
-            animation: swing 5s ease-in-out infinite;
-            transform-origin: top center;
-            filter: grayscale(100%) contrast(120%) brightness(80%);
-        }
-
-        @keyframes swing {
-            0% { transform: translateX(-50%) rotate(5deg); }
-            50% { transform: translateX(-50%) rotate(-5deg); }
-            100% { transform: translateX(-50%) rotate(5deg); }
-        }
-
-        .profile {
-            margin-top: 220px;
-        }
-
-        .profile img {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid rgb(255, 255, 255);
-        }
-
-        .socials {
-            margin-top: 10px;
-        }
-
-        .btn {
-            color: white;
-            font-size: 24px;
-            margin: 5px;
-            text-decoration: none;
-        }
-
-        .btn:hover {
-            color: gray;
-        }
-
-        .domains {
-            margin-top: 40px;
-            font-size: 15px;
-        }
-
-        .domains p {
-            margin: 5px 0;
-        }
-
-        .domain-link {
-            color: rgb(255, 0, 0);
-            text-decoration: none;
-        }
-
-        .domain-link:hover {
-            text-decoration: underline;
-        }
-
-        .snow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        .typing {
-            display: inline-block;
-            white-space: nowrap;
-            overflow: hidden;
-            border-right: 2px solid white;
-            font-size: 15px;
-        }
-
-        #particles-js {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;  /* Ensure particles are behind other elements */
-        }
-    </style>
+    #particles-js {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1; /* Place particles behind the doll */
+    }
+  </style>
 </head>
 <body>
+  <!-- Hanging Doll Image -->
+  <img src="https://files.catbox.moe/vjizjl.png" alt="Hanging Doll" class="doll">
+  
+  <!-- Particles background -->
+  <div id="particles-js"></div>
 
-    <div id="particles-js"></div> <!-- Particle Background -->
+  <!-- Falling '⬩' Particles -->
+  <canvas id="fallingParticles"></canvas>
 
-    <img src="https://files.catbox.moe/vjizjl.png" alt="Hanging Doll" class="doll"> 
+  <!-- Background audio -->
+  <audio id="background-audio" loop>
+    <source src="https://files.catbox.moe/zoj9x8.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
 
-    <div class="container">
-        <div class="profile">
-            <img src="https://files.catbox.moe/wl69vn.jpg" alt="Profile Picture">
-            <p>Convict</p>
-            <p>Anti-Extorter % Developer</p>
-            <div class="socials">
-                <a class="btn" href="https://discord.com/users/1050643297527418910" target="_blank">
-                    <i class="fab fa-discord"></i>
-                </a>
-                <a class="btn" href="https://www.tiktok.com/@euphoniousy" target="_blank">
-                    <i class="fab fa-tiktok"></i>
-                </a>
-            </div>
-        </div>
+  <script>
+    // Set up the canvas for falling particles
+    const canvas = document.getElementById('fallingParticles');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-        <div class="domains">
-            <p id="typing-text" class="typing"></p>
-            <p>The current active domains are:</p>
-            <p><a href="https://convict.site" target="_blank" class="domain-link">convict.site</a></p>
-            <p><a href="https://convict.lol" target="_blank" class="domain-link">convict.lol</a></p>
-            <p><a href="https://convict.wtf" target="_blank" class="domain-link">convict.wtf</a></p>
-        </div>
-    </div>
-
-    <canvas class="snow"></canvas>
-
-    <!-- Background Audio -->
-    <audio id="bg-music" loop>
-        <source src="https://files.catbox.moe/luenkf.mp3" type="audio/mpeg">
-    </audio>
-
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    <script>
-        // Ensure Audio Plays on User Interaction
-        document.addEventListener("click", function() {
-            const music = document.getElementById("bg-music");
-            if (music.paused) {
-                music.play().catch(error => console.log("Audio play blocked: ", error));
-            }
-        });
-
-        // Title Switching with Loop
-        const titles = ["convict", "<3", "wtf", ":3", "niggers"];
-        let titleIndex = 0;
-
-        setInterval(() => {
-            document.title = titles[titleIndex];
-            titleIndex = (titleIndex + 1) % titles.length;
-        }, 100);
-
-        // Typing Effect
-        const bios = [
-            "I am the best at everything I do.",
-            "I will always be better than you.",
-            "I love you so much lex."
-        ];
-        let bioIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        const typingElement = document.getElementById("typing-text");
-
-        function typeEffect() {
-            const currentText = bios[bioIndex];
-
-            if (isDeleting) {
-                typingElement.textContent = currentText.substring(0, charIndex - 1);
-                charIndex--;
-            } else {
-                typingElement.textContent = currentText.substring(0, charIndex + 1);
-                charIndex++;
-            }
-
-            if (!isDeleting && charIndex === currentText.length) {
-                setTimeout(() => { isDeleting = true; }, 1000);
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                bioIndex = (bioIndex + 1) % bios.length;
-            }
-
-            setTimeout(typeEffect, isDeleting ? 50 : 100);
+    // Particle class for falling "⬩" particles
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width; 
+            this.y = Math.random() * -canvas.height; // Start above the canvas
+            this.velocityY = Math.random() * 1 + 1; // Random fall speed between 1 and 2
+            this.size = 10; // Fixed size for visibility
+            this.character = '⬩'; // Particle character
+            this.color = 'white'; // Particle color
         }
 
-        typeEffect();
+        update() {
+            this.y += this.velocityY; // Move particle down
 
-        // Particles background
-        particlesJS('particles-js', {
-            particles: {
-                number: {
-                    value: 80,
-                    density: {
-                        enable: true,
-                        value_area: 800
-                    }
-                },
-                color: {
-                    value: "#ffffff"
-                },
-                shape: {
-                    type: "circle",
-                    stroke: {
-                        width: 0,
-                        color: "#000000"
-                    },
-                    polygon: {
-                        nb_sides: 5
-                    },
-                    image: {
-                        src: "img/github.svg",
-                        width: 100,
-                        height: 100
-                    }
-                },
-                opacity: {
-                    value: 0.5,
-                    random: false,
-                    anim: {
-                        enable: false,
-                        speed: 1,
-                        opacity_min: 0.1,
-                        sync: false
-                    }
-                },
-                size: {
-                    value: 1,
-                    random: true,
-                    anim: {
-                        enable: false,
-                        speed: 40,
-                        size_min: 0.1,
-                        sync: false
-                    }
-                },
-                line_linked: {
-                    enable: true,
-                    distance: 72.63198768608454,
-                    color: "#ffffff",
-                    opacity: 0.5,
-                    width: 1
-                },
-                move: {
-                    enable: true,
-                    speed: 4,
-                    direction: "none",
-                    random: false,
-                    straight: false,
-                    out_mode: "out",
-                    bounce: false,
-                    attract: {
-                        enable: false,
-                        rotateX: 600,
-                        rotateY: 1200
-                    }
-                }
-            },
-            interactivity: {
-                detect_on: "canvas",
-                events: {
-                    onhover: {
-                        enable: true,
-                        mode: "repulse"
-                    },
-                    onclick: {
-                        enable: true,
-                        mode: "push"
-                    },
-                    resize: true
-                },
-                modes: {
-                    grab: {
-                        distance: 400,
-                        line_linked: {
-                            opacity: 1
-                        }
-                    },
-                    bubble: {
-                        distance: 400,
-                        size: 40,
-                        duration: 2,
-                        opacity: 8,
-                        speed: 3
-                    },
-                    repulse: {
-                        distance: 50,
-                        duration: 0.4
-                    },
-                    push: {
-                        particles_nb: 4
-                    },
-                    remove: {
-                        particles_nb: 2
-                    }
-                }
-            },
-            retina_detect: true
+            // Reset particle to the top if it falls off the screen
+            if (this.y > canvas.height) {
+                this.y = -this.size;
+                this.x = Math.random() * canvas.width; // Random horizontal position for resetting
+            }
+        }
+
+        draw() {
+            ctx.font = `${this.size}px Arial`; // Set the font size
+            ctx.fillStyle = this.color; // Set color
+            ctx.fillText(this.character, this.x, this.y); // Draw the character at the updated position
+        }
+    }
+
+    const fallingParticles = [];
+    // Limit the number of particles to 10
+    for (let i = 0; i < 10; i++) {
+        fallingParticles.push(new Particle()); // Create 10 particles
+    }
+
+    function animateFallingParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+
+        fallingParticles.forEach(particle => {
+            particle.update(); // Update position
+            particle.draw(); // Draw the particle
         });
-    </script>
 
+        requestAnimationFrame(animateFallingParticles); // Loop animation
+    }
+
+    animateFallingParticles(); // Start the animation for falling particles
+
+    // Adjust canvas size when window is resized
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+
+    // Play the background audio on user click or touch
+    window.addEventListener('click', () => {
+        const audio = document.getElementById('background-audio');
+        audio.play(); // Start audio when user clicks anywhere on the page
+    });
+
+    // Title Switching with Loop
+    const titles = ["convict", "<3", "wtf", ":3", "niggers"];
+    let titleIndex = 0;
+
+    // Change the title continuously
+    setInterval(() => {
+      document.title = titles[titleIndex];
+      titleIndex = (titleIndex + 1) % titles.length; // Reset to 0 after the last title
+    }, 250); // Change every 250ms
+
+  </script>
 </body>
 </html>
