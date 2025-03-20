@@ -21,7 +21,7 @@
       left: 50%;
       transform: translateX(-50%);
       width: 150px; /* Adjust size of the doll */
-      animation: swing 3s ease-in-out infinite;
+      animation: swing 4s ease-in-out infinite;
       transform-origin: top center;
       filter: grayscale(100%) contrast(120%) brightness(80%);
     }
@@ -34,7 +34,7 @@
     }
 
     #particles-js {
-      width: 100%;
+      width: 100%; 
       height: 100%;
       position: absolute;
       top: 0;
@@ -55,7 +55,7 @@
 
   <!-- Background audio -->
   <audio id="background-audio" loop>
-    <source src="https://files.catbox.moe/zoj9x8.mp3" type="audio/mpeg">
+    <source src="https://files.catbox.moe/ijg9dw.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
 
@@ -72,7 +72,7 @@
             this.x = Math.random() * canvas.width; 
             this.y = Math.random() * -canvas.height; // Start above the canvas
             this.velocityY = Math.random() * 1 + 1; // Random fall speed between 1 and 2
-            this.size = 10; // Fixed size for visibility
+            this.size = 8; // Fixed size for visibility
             this.character = '⬩'; // Particle character
             this.color = 'white'; // Particle color
         }
@@ -96,7 +96,7 @@
 
     const fallingParticles = [];
     // Limit the number of particles to 10
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 25; i++) {
         fallingParticles.push(new Particle()); // Create 10 particles
     }
 
@@ -114,7 +114,7 @@
     animateFallingParticles(); // Start the animation for falling particles
 
     // Adjust canvas size when window is resized
-    window.addEventListener('resize', () => {
+        window.addEventListener('resize', () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     });
