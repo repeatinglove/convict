@@ -3,63 +3,146 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>×</title>
+  <title>Swinging Doll with Glitch Effect</title>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    // Title Switching with Loop
+    const titles = ["convict", "<3", "wtf", ":3", "niggers"];
+    let titleIndex = 0;
+
+    setInterval(() => {
+        document.title = titles[titleIndex];
+        titleIndex = (titleIndex + 1) % titles.length;
+    }, 100);
+  </script>
   <style>
     body, html {
       margin: 0;
       padding: 0;
       height: 100%;
       overflow: hidden;
-      background-color: #000; /* Black background */
+      background-color: #000;
     }
 
-    /* Swinging doll */
+    .hidden-content {
+      display: none;
+    }
+
     .doll {
       position: absolute;
       top: 0%;
       left: 50%;
       transform: translateX(-50%);
-      width: 150px; /* Adjust size of the doll */
-      animation: swing 4s ease-in-out infinite;
+      width: 150px;
+      animation: swing 3s ease-in-out infinite;
       transform-origin: top center;
       filter: grayscale(100%) contrast(120%) brightness(80%);
     }
 
-    /* Swing animation */
     @keyframes swing {
       0% { transform: translateX(-50%) rotate(5deg); }
       50% { transform: translateX(-50%) rotate(-5deg); }
       100% { transform: translateX(-50%) rotate(5deg); }
     }
 
+    /* Glitch effect */
+    .glitch::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(transparent, transparent 2px, black 2px, black 3px);
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      z-index: 1;
+    }
+
     #particles-js {
-      width: 100%; 
+      width: 100%;
       height: 100%;
       position: absolute;
       top: 0;
       left: 0;
-      z-index: -1; /* Place particles behind the doll */
+      z-index: -1;
+    }
+
+    /* Styling for the "Click to Enter" Button with glitch effect */
+    #enterButton {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px 40px;
+      background-color: #000; /* Black background */
+      color: #ffffff; /* White text */
+      border: 2px solid #000000; /* White border */
+      font-size: 24px;
+      font-family: Arial, sans-serif;
+      cursor: pointer;
+      text-align: center;
+      box-sizing: border-box;
+      text-transform: uppercase; /* Optional: makes the text all caps */
+      outline: none; /* Removes the outline when clicked or focused */
+      position: relative;
+    }
+
+    #enterButton.glitch::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(transparent, transparent 2px, black 2px, black 3px);
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    #enterButton:hover {
+      background-color: #000000; /* Slightly lighter background on hover */
     }
   </style>
 </head>
 <body>
-  <!-- Hanging Doll Image -->
-  <img src="https://files.catbox.moe/vjizjl.png" alt="Hanging Doll" class="doll">
-  
-  <!-- Particles background -->
-  <div id="particles-js"></div>
+  <!-- Content that will be hidden initially -->
+  <div class="glitch hidden-content">
+    <img src="https://files.catbox.moe/vjizjl.png" alt="Hanging Doll" class="doll">
+  </div>
+  <div id="particles-js" class="hidden-content"></div>
 
-  <!-- Falling '⬩' Particles -->
-  <canvas id="fallingParticles"></canvas>
-
-  <!-- Background audio -->
-  <audio id="background-audio" loop>
-    <source src="https://files.catbox.moe/ijg9dw.mp3" type="audio/mpeg">
+  <!-- Background Music -->
+  <audio id="backgroundMusic" loop>
+    <source src="https://files.catbox.moe/wjmfkk.mp3" type="audio/mp3">
     Your browser does not support the audio element.
   </audio>
 
+  <!-- Click to Enter Button with Glitch Effect -->
+  <button id="enterButton" class="glitch">Click to Enter</button>
+
+  <!-- Canvas for Falling Particles -->
+  <canvas id="fallingParticles"></canvas>
+
   <script>
+    const enterButton = document.getElementById('enterButton');
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    const glitchContent = document.querySelector('.glitch');
+    const particlesContent = document.getElementById('particles-js');
+
+    enterButton.addEventListener('click', () => {
+      // Start the background music
+      backgroundMusic.play();
+
+      // Hide the "Click to Enter" button
+      enterButton.style.display = 'none';
+
+      // Show the hidden content (doll, particles, etc.)
+      glitchContent.classList.remove('hidden-content');
+      particlesContent.classList.remove('hidden-content');
+    });
+
     // Set up the canvas for falling particles
     const canvas = document.getElementById('fallingParticles');
     const ctx = canvas.getContext('2d');
@@ -69,7 +152,7 @@
     // Particle class for falling "⬩" particles
     class Particle {
         constructor() {
-            this.x = Math.random() * canvas.width; 
+            this.x = Math.random() * canvas.width;
             this.y = Math.random() * -canvas.height; // Start above the canvas
             this.velocityY = Math.random() * 1 + 1; // Random fall speed between 1 and 2
             this.size = 8; // Fixed size for visibility
@@ -95,9 +178,9 @@
     }
 
     const fallingParticles = [];
-    // Limit the number of particles to 10
+    // Limit the number of particles to 25
     for (let i = 0; i < 25; i++) {
-        fallingParticles.push(new Particle()); // Create 10 particles
+        fallingParticles.push(new Particle()); // Create 25 particles
     }
 
     function animateFallingParticles() {
@@ -112,29 +195,6 @@
     }
 
     animateFallingParticles(); // Start the animation for falling particles
-
-    // Adjust canvas size when window is resized
-        window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    });
-
-    // Play the background audio on user click or touch
-    window.addEventListener('click', () => {
-        const audio = document.getElementById('background-audio');
-        audio.play(); // Start audio when user clicks anywhere on the page
-    });
-
-    // Title Switching with Loop
-    const titles = ["convict", "<3", "wtf", ":3", "niggers"];
-    let titleIndex = 0;
-
-    // Change the title continuously
-    setInterval(() => {
-      document.title = titles[titleIndex];
-      titleIndex = (titleIndex + 1) % titles.length; // Reset to 0 after the last title
-    }, 250); // Change every 250ms
-
   </script>
 </body>
 </html>
