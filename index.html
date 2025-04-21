@@ -4,20 +4,56 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Swinging Doll with Glitch Effect</title>
-  
+
   <!-- Importing FontAwesome -->
   <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/js/all.min.js"></script>
 
   <!-- Importing JMH Typewriter Font -->
   <link href="https://fonts.googleapis.com/css2?family=JMH+Typewriter&display=swap" rel="stylesheet">
 
+  <!-- Title Glitch -->
   <script>
-    const titles = ["convict", "<3", "wtf", ":3", "niggers"];
+    const titles = ["convict", "<3", "wtf", ":3", "[redacted]"];
     let titleIndex = 0;
     setInterval(() => {
       document.title = titles[titleIndex];
       titleIndex = (titleIndex + 1) % titles.length;
     }, 100);
+  </script>
+
+  <!-- Anti-DevTools Script -->
+  <script>
+    (function() {
+      const threshold = 160;
+
+      function devToolsOpen() {
+        const widthDiff = window.outerWidth - window.innerWidth > threshold;
+        const heightDiff = window.outerHeight - window.innerHeight > threshold;
+        return widthDiff || heightDiff;
+      }
+
+      function crashPage() {
+        document.body.innerHTML = "";
+        location.href = "about:blank";
+      }
+
+      setInterval(() => {
+        if (devToolsOpen()) crashPage();
+      }, 500);
+
+      // Optional console trick
+      const consoleCheck = () => {
+        const el = new Image();
+        Object.defineProperty(el, 'id', {
+          get: function () {
+            crashPage();
+          }
+        });
+        console.log(el);
+      };
+
+      setInterval(consoleCheck, 1000);
+    })();
   </script>
 
   <style>
@@ -102,7 +138,7 @@
       transform: translate(-50%, -50%);
       text-align: center;
       color: white;
-      font-family: 'JMH Typewriter', monospace !important; /* Apply font here */
+      font-family: 'JMH Typewriter', monospace !important;
       z-index: 2;
     }
 
@@ -135,34 +171,30 @@
       z-index: 1;
     }
 
-    /* Apply JMH Typewriter font to profile name and handle specifically */
     .profile-name {
       font-size: 28px;
       font-weight: bold;
       margin-top: 6px;
-      font-family: 'JMH Typewriter', monospace !important; /* Force application */
+      font-family: 'JMH Typewriter', monospace !important;
     }
 
     .profile-handle {
       font-size: 16px;
       color: white;
       margin-top: 6px;
-      font-family: 'JMH Typewriter', monospace !important; /* Force application */
+      font-family: 'JMH Typewriter', monospace !important;
     }
   </style>
 </head>
 <body>
-  <!-- GLITCH DOLL -->
   <div class="glitch hidden-content">
     <div class="doll-wrapper">
       <img src="https://files.catbox.moe/vjizjl.png" alt="Hanging Doll" class="doll">
     </div>
   </div>
 
-  <!-- PARTICLES BACKGROUND -->
   <div id="particles-js" class="hidden-content"></div>
 
-  <!-- PROFILE SECTION -->
   <div class="profile-container hidden-content">
     <div class="profile-img-wrapper">
       <img src="https://files.catbox.moe/7jxqkf.jpg" alt="Profile" class="profile-img">
@@ -171,16 +203,12 @@
     <div class="profile-handle">@quitcaring on dc</div>
   </div>
 
-  <!-- BACKGROUND MUSIC -->
   <audio id="backgroundMusic" loop>
     <source src="https://files.catbox.moe/w7a1z3.mp3" type="audio/mp3">
     Your browser does not support the audio element.
   </audio>
 
-  <!-- ENTER BUTTON -->
   <button id="enterButton" class="glitch">Click to Enter</button>
-
-  <!-- FALLING PARTICLES -->
   <canvas id="fallingParticles"></canvas>
 
   <script>
@@ -198,7 +226,6 @@
       profileContent.classList.remove('hidden-content');
     });
 
-    // FALLING PARTICLE ANIMATION
     const canvas = document.getElementById('fallingParticles');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
