@@ -2,206 +2,193 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>×</title>
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <title>convict</title>
   <style>
-    body, html {
+    * {
       margin: 0;
       padding: 0;
-      height: 100%;
-      overflow: hidden;
-      background-color: #000; /* Black background */
+      box-sizing: border-box;
     }
 
-    /* Swinging doll */
-    .doll {
-      position: absolute;
-      top: 0%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 150px; /* Adjust size of the doll */
-      animation: swing 4s ease-in-out infinite;
-      transform-origin: top center;
-      filter: grayscale(100%) contrast(120%) brightness(80%);
-    }
-
-    .glitch::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
+    html, body {
       width: 100%;
       height: 100%;
-      background: repeating-linear-gradient(transparent, transparent 2px, #111 2px, #111 3px);
-      mix-blend-mode: multiply;
-      pointer-events: none;
-      z-index: 1;
+      background-color: black;
+      font-family: 'Courier New', monospace;
+      color: white;
+      overflow: hidden;
     }
 
-    .doll-wrapper {
-      position: absolute;
-      top: 0%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 150px;
-      animation: swing 3s ease-in-out infinite;
-      transform-origin: top center;
-      filter: grayscale(100%) contrast(120%) brightness(80%);
-    }
-    
-    /* Swing animation */
-    @keyframes swing {
-      0% { transform: translateX(-50%) rotate(5deg); }
-      50% { transform: translateX(-50%) rotate(-5deg); }
-      100% { transform: translateX(-50%) rotate(5deg); }
-    }
-
-    #particles-js {
-      width: 100%; 
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: -1; /* Place particles behind the doll */
-    }
-    
-    #enterButton {
+    .centered {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      padding: 20px 40px;
-      background-color: #000;
-      color: #ffffff;
-      border: 2px solid #000000;
-      font-size: 24px;
-      font-family: 'JMH Typewriter', monospace !important;
-      cursor: pointer;
       text-align: center;
-      text-transform: uppercase;
-      z-index: 3;
     }
 
-    .hidden-content {
+    .click-to-enter {
+      cursor: pointer;
+      font-size: 18px;
+      text-decoration: none;
+      color: white;
+    }
+
+    .hidden {
       display: none;
     }
 
+    .pfp {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
+    }
+
+    .username {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-transform: lowercase;
+    }
+
+    .bio {
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid white;
+      width: fit-content;
+      margin: 0 auto;
+    }
+
+    canvas#fallingParticles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
   </style>
 </head>
 <body>
-  <!-- GLITCH DOLL -->
-  <div class="glitch hidden-content">
-    <div class="doll-wrapper">
-      <img src="https://files.catbox.moe/vjizjl.png" alt="Hanging Doll" class="doll">
-    </div>
-  </div>
-  
-  <!-- Particles background -->
-  <div id="particles-js"></div>
 
-  <!-- Falling '⬩' Particles -->
-  <canvas id="fallingParticles"></canvas>
+<audio id="backgroundMusic" src="https://files.catbox.moe/w7a1z3.mp3" loop></audio>
 
-  <!-- Background audio -->
-  <audio id="background-audio" loop>
-    <source src="https://files.catbox.moe/ijg9dw.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
+<!-- Landing Screen -->
+<div id="landing" class="centered">
+  <a class="click-to-enter" onclick="enterSite()">click to enter</a>
+</div>
 
-  <!-- ENTER BUTTON -->
-  <button id="enterButton" class="glitch">Click to Enter</button>
+<!-- Profile Screen -->
+<div id="profile" class="centered hidden">
+  <img src="https://files.catbox.moe/7jxqkf.jpg" alt="pfp" class="pfp">
+  <div class="username">convict</div>
+  <div id="bio" class="bio"></div>
+</div>
 
-  <script>
-    // Set up the canvas for falling particles
-    const canvas = document.getElementById('fallingParticles');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+<!-- Falling Particles Canvas -->
+<canvas id="fallingParticles"></canvas>
 
-    // Particle class for falling "⬩" particles
-    class Particle {
-        constructor() {
-            this.x = Math.random() * canvas.width; 
-            this.y = Math.random() * -canvas.height; // Start above the canvas
-            this.velocityY = Math.random() * 1 + 1; // Random fall speed between 1 and 2
-            this.size = 8; // Fixed size for visibility
-            this.character = '⬩'; // Particle character
-            this.color = 'white'; // Particle color
+<script>
+  // Title Rotator
+  const titles = ["convict", "<3", "wtf", ":3"];
+  let titleIndex = 0;
+  setInterval(() => {
+    document.title = titles[titleIndex];
+    titleIndex = (titleIndex + 1) % titles.length;
+  }, 100);
+
+  // Smooth Typewriter Effect
+  const bios = ["i love you alexis", "my sweet girl"];
+  const bioElement = document.getElementById("bio");
+
+  let bioIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  let typingSpeed = 100;
+  let lastTime = 0;
+
+  function smoothTypeWriter(timestamp) {
+    if (!lastTime || timestamp - lastTime >= typingSpeed) {
+      const currentText = bios[bioIndex];
+      if (isDeleting) {
+        charIndex--;
+        if (charIndex < 0) {
+          isDeleting = false;
+          bioIndex = (bioIndex + 1) % bios.length;
+          typingSpeed = 300;
         }
-
-        update() {
-            this.y += this.velocityY; // Move particle down
-
-            // Reset particle to the top if it falls off the screen
-            if (this.y > canvas.height) {
-                this.y = -this.size;
-                this.x = Math.random() * canvas.width; // Random horizontal position for resetting
-            }
+      } else {
+        charIndex++;
+        if (charIndex > currentText.length) {
+          isDeleting = true;
+          typingSpeed = 2000;
         }
+      }
 
-        draw() {
-            ctx.font = `${this.size}px Arial`; // Set the font size
-            ctx.fillStyle = this.color; // Set color
-            ctx.fillText(this.character, this.x, this.y); // Draw the character at the updated position
-        }
+      bioElement.innerHTML = currentText.substring(0, charIndex);
+      lastTime = timestamp;
+      typingSpeed = isDeleting ? 50 : 100;
     }
 
-    const fallingParticles = [];
-    // Limit the number of particles to 10
-    for (let i = 0; i < 25; i++) {
-        fallingParticles.push(new Particle()); // Create 25 particles
+    requestAnimationFrame(smoothTypeWriter);
+  }
+
+  function enterSite() {
+    document.getElementById("landing").classList.add("hidden");
+    document.getElementById("profile").classList.remove("hidden");
+    document.getElementById("backgroundMusic").play();
+    requestAnimationFrame(smoothTypeWriter);
+  }
+
+  // Falling Particle Animation
+  const canvas = document.getElementById('fallingParticles');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  class Particle {
+    constructor() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * -canvas.height;
+      this.velocityY = Math.random() * 1 + 1;
+      this.size = 8;
+      this.character = '⬩';
+      this.color = 'white';
     }
 
-    function animateFallingParticles() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
-
-        fallingParticles.forEach(particle => {
-            particle.update(); // Update position
-            particle.draw(); // Draw the particle
-        });
-
-        requestAnimationFrame(animateFallingParticles); // Loop animation
+    update() {
+      this.y += this.velocityY;
+      if (this.y > canvas.height) {
+        this.y = -this.size;
+        this.x = Math.random() * canvas.width;
+      }
     }
 
-    animateFallingParticles(); // Start the animation for falling particles
+    draw() {
+      ctx.font = `${this.size}px Courier New`;
+      ctx.fillStyle = this.color;
+      ctx.fillText(this.character, this.x, this.y);
+    }
+  }
 
-    // Adjust canvas size when window is resized
-    window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+  const fallingParticles = [];
+  for (let i = 0; i < 25; i++) {
+    fallingParticles.push(new Particle());
+  }
+
+  function animateFallingParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    fallingParticles.forEach(p => {
+      p.update();
+      p.draw();
     });
+    requestAnimationFrame(animateFallingParticles);
+  }
 
-    // Play the background audio on user click or touch
-    window.addEventListener('click', () => {
-        const audio = document.getElementById('background-audio');
-        audio.play(); // Start audio when user clicks anywhere on the page
-    });
+  animateFallingParticles();
+</script>
 
-    // Title Switching with Loop
-    const titles = ["convict", "<3", "wtf", ":3", "niggers", "kys", "faggot"];
-    let titleIndex = 0;
-
-    // Change the title continuously
-    setInterval(() => {
-      document.title = titles[titleIndex];
-      titleIndex = (titleIndex + 1) % titles.length; // Reset to 0 after the last title
-    }, 250); // Change every 250ms
-
-    // Button functionality
-    const enterButton = document.getElementById('enterButton');
-    const backgroundMusic = document.getElementById('background-audio');
-    const glitchContent = document.querySelector('.glitch');
-    const particlesContent = document.getElementById('particles-js');
-    const profileContent = document.querySelector('.doll-wrapper');
-
-    enterButton.addEventListener('click', () => {
-      backgroundMusic.play();
-      enterButton.style.display = 'none';
-      glitchContent.classList.remove('hidden-content');
-      particlesContent.classList.remove('hidden-content');
-      profileContent.classList.remove('hidden-content');
-    });
-  </script>
 </body>
 </html>
