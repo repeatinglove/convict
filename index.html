@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -19,12 +19,21 @@
       overflow: hidden;
     }
 
-    .centered {
-      position: absolute;
+    .centered-fixed {
+      position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
+      z-index: 5;
+    }
+
+    .bio-container {
+      position: fixed;
+      top: calc(50% + 90px); /* 90px below the center (pfp + username space) */
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
     }
 
     .click-to-enter {
@@ -49,7 +58,6 @@
     .username {
       font-size: 20px;
       font-weight: bold;
-      margin-bottom: 10px;
       text-transform: lowercase;
     }
 
@@ -76,15 +84,22 @@
 <audio id="backgroundMusic" src="https://files.catbox.moe/w7a1z3.mp3" loop></audio>
 
 <!-- Landing Screen -->
-<div id="landing" class="centered">
+<div id="landing" class="centered-fixed">
   <a class="click-to-enter" onclick="enterSite()">click to enter</a>
 </div>
 
 <!-- Profile Screen -->
-<div id="profile" class="centered hidden">
-  <img src="https://files.catbox.moe/7jxqkf.jpg" alt="pfp" class="pfp">
-  <div class="username">convict</div>
-  <div id="bio" class="bio"></div>
+<div id="profile" class="hidden">
+  <!-- Centered PFP and Name -->
+  <div class="centered-fixed">
+    <img src="https://files.catbox.moe/7jxqkf.jpg" alt="pfp" class="pfp">
+    <div class="username">convict</div>
+  </div>
+
+  <!-- Typewriter Bio below center -->
+  <div class="bio-container">
+    <div id="bio" class="bio"></div>
+  </div>
 </div>
 
 <!-- Falling Particles Canvas -->
