@@ -41,6 +41,34 @@
       left: 0;
       z-index: -1; /* Place particles behind the doll */
     }
+
+    /* Enter button style */
+    .glitch {
+      font-family: 'Arial', sans-serif;
+      color: #ffffff;
+      font-size: 24px;
+      padding: 15px 30px;
+      border: 2px solid #ffffff;
+      background: transparent;
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: glitch-animation 1s infinite linear;
+    }
+
+    @keyframes glitch-animation {
+      0% { text-shadow: 2px 2px 0 red, -2px -2px 0 blue; }
+      50% { text-shadow: -2px -2px 0 red, 2px 2px 0 blue; }
+      100% { text-shadow: 2px 2px 0 red, -2px -2px 0 blue; }
+    }
+
+    /* Hidden content */
+    .hidden-content {
+      display: none;
+    }
+
   </style>
 </head>
 <body>
@@ -56,11 +84,40 @@
   <!-- Background audio -->
   <audio id="background-audio" loop>
     <source src="https://files.catbox.moe/ijg9dw.mp3" type="audio/mpeg">
-    <source src="https://files.catbox.moe/w7a1z3.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
 
+  <!-- ENTER BUTTON -->
+  <button id="enterButton" class="glitch">Click to Enter</button>
+
+  <!-- Hidden Content -->
+  <div id="glitchContent" class="hidden-content">
+    <!-- Add your content that will appear after clicking -->
+  </div>
+  <div id="particlesContent" class="hidden-content">
+    <!-- Add your particles-related content here -->
+  </div>
+  <div id="profileContent" class="hidden-content">
+    <!-- Add your profile-related content here -->
+  </div>
+
   <script>
+    // Get elements
+    const enterButton = document.getElementById('enterButton');
+    const glitchContent = document.getElementById('glitchContent');
+    const particlesContent = document.getElementById('particlesContent');
+    const profileContent = document.getElementById('profileContent');
+    const backgroundMusic = document.getElementById('background-audio');
+
+    // Add event listener to the button
+    enterButton.addEventListener('click', () => {
+      backgroundMusic.play(); // Play the background music
+      enterButton.style.display = 'none'; // Hide the enter button
+      glitchContent.classList.remove('hidden-content'); // Show glitch content
+      particlesContent.classList.remove('hidden-content'); // Show particles content
+      profileContent.classList.remove('hidden-content'); // Show profile content
+    });
+
     // Set up the canvas for falling particles
     const canvas = document.getElementById('fallingParticles');
     const ctx = canvas.getContext('2d');
@@ -115,7 +172,7 @@
     animateFallingParticles(); // Start the animation for falling particles
 
     // Adjust canvas size when window is resized
-        window.addEventListener('resize', () => {
+    window.addEventListener('resize', () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     });
@@ -127,7 +184,7 @@
     });
 
     // Title Switching with Loop
-    const titles = ["convict", "<3", "wtf", ":3", "niggers", "kys", "faggot"];
+    const titles = ["convict", "<3", "wtf", ":3", "niggers"];
     let titleIndex = 0;
 
     // Change the title continuously
@@ -135,7 +192,6 @@
       document.title = titles[titleIndex];
       titleIndex = (titleIndex + 1) % titles.length; // Reset to 0 after the last title
     }, 250); // Change every 250ms
-
   </script>
 </body>
 </html>
