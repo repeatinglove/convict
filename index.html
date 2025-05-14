@@ -1,209 +1,306 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>convict</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Swinging Doll with Glitch Effect</title>
+  
+  <!-- FontAwesome -->
+  <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/js/all.min.js"></script>
+
   <style>
-    * {
+    body, html {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      width: 100%;
       height: 100%;
-      background-color: black;
-      font-family: 'Courier New', monospace;
-      color: white;
       overflow: hidden;
+      background-color: #000;
+      font-family: 'Courier New', monospace;
     }
 
-    .centered-fixed {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      z-index: 5;
-    }
-
-    .bio-container {
-      position: fixed;
-      top: calc(50% + 90px); /* 90px below the center (pfp + username space) */
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 5;
-    }
-
-    .click-to-enter {
-      cursor: pointer;
-      font-size: 18px;
-      text-decoration: none;
-      color: white;
-    }
-
-    .hidden {
+    .hidden-content {
       display: none;
     }
 
-    .pfp {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 15px;
-    }
-
-    .username {
-      font-size: 20px;
-      font-weight: bold;
-      text-transform: lowercase;
-    }
-
-    .bio {
-      font-size: 14px;
-      white-space: nowrap;
-      overflow: hidden;
-      border-right: 2px solid white;
-      width: fit-content;
-      margin: 0 auto;
-    }
-
-    canvas#fallingParticles {
-      position: fixed;
+    .glitch::before {
+      content: "";
+      position: absolute;
       top: 0;
       left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(transparent, transparent 2px, #111 2px, #111 3px);
+      mix-blend-mode: multiply;
       pointer-events: none;
+      z-index: 1;
+    }
+
+    .doll-wrapper {
+      position: absolute;
+      top: 0%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      animation: swing 3s ease-in-out infinite;
+      transform-origin: top center;
+      filter: grayscale(100%) contrast(120%) brightness(80%);
+    }
+
+    .doll {
+      width: 100%;
+      display: block;
+    }
+
+    @keyframes swing {
+      0% { transform: translateX(-50%) rotate(5deg); }
+      50% { transform: translateX(-50%) rotate(-5deg); }
+      100% { transform: translateX(-50%) rotate(5deg); }
+    }
+
+    #particles-js {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
       z-index: -1;
     }
+
+    #enterButton {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px 40px;
+      background-color: #000;
+      color: #ffffff;
+      border: 2px solid #000000;
+      font-size: 24px;
+      font-family: 'Courier New', monospace;
+      cursor: pointer;
+      text-align: center;
+      text-transform: uppercase;
+      z-index: 3;
+    }
+
+    .profile-container {
+      position: absolute;
+      top: 60%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: white;
+      font-family: 'Courier New', monospace;
+      z-index: 2;
+    }
+
+    .profile-img-wrapper {
+      width: 130px;
+      height: 130px;
+      margin: 0 auto 15px auto;
+      border-radius: 50%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .profile-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .typing {
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation: typing 2s steps(30) 1s forwards, blink 0.75s step-end infinite;
+    }
+
+    @keyframes typing {
+      0% { width: 0; }
+      100% { width: 100%; }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+
+    .scan-line::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.4) 2px,
+        rgba(0, 0, 0, 0.4) 4px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .profile-img-wrapper.scan-line,
+    .profile-handle.scan-line,
+    .link-btn.scan-line {
+      position: relative;
+      z-index: 2;
+    }
+
+    .link-btn {
+      display: inline-block;
+      color: white;
+      text-decoration: none;
+      margin: 0 5px;
+      font-family: 'Courier New', monospace;
+      position: relative;
+      z-index: 2;
+    }
+
+    .profile-handle {
+      position: relative;
+      font-size: 16px;
+    }
+
+    .profile-handle, .link-btn {
+      background: transparent;
+    }
+
   </style>
+  
+  <script>
+    const titles = ["convict", "<3", "wtf", ":3", "nigger"]; 
+    let titleIndex = 0;
+    setInterval(() => {
+      document.title = titles[titleIndex];
+      titleIndex = (titleIndex + 1) % titles.length;
+    }, 100);
+  </script>
+
 </head>
 <body>
-
-<audio id="backgroundMusic" src="https://files.catbox.moe/w7a1z3.mp3" loop></audio>
-
-<!-- Landing Screen -->
-<div id="landing" class="centered-fixed">
-  <a class="click-to-enter" onclick="enterSite()">click to enter</a>
-</div>
-
-<!-- Profile Screen -->
-<div id="profile" class="hidden">
-  <!-- Centered PFP and Name -->
-  <div class="centered-fixed">
-    <img src="https://files.catbox.moe/7jxqkf.jpg" alt="pfp" class="pfp">
-    <div class="username">convict</div>
+  <!-- GLITCH DOLL -->
+  <div class="glitch hidden-content">
+    <div class="doll-wrapper">
+      <img src="https://files.catbox.moe/vjizjl.png" alt="Hanging Doll" class="doll">
+    </div>
   </div>
 
-  <!-- Typewriter Bio below center -->
-  <div class="bio-container">
-    <div id="bio" class="bio"></div>
+  <!-- PARTICLES BACKGROUND -->
+  <div id="particles-js" class="hidden-content"></div>
+
+  <!-- PROFILE SECTION -->
+  <div class="profile-container hidden-content">
+    <div class="profile-img-wrapper scan-line">
+      <img src="https://files.catbox.moe/7jxqkf.jpg" alt="Profile" class="profile-img">
+    </div>
+    <div class="profile-handle scan-line">
+      <span id="bio" class="typing"></span>
+    </div>
+    <div class="profile-links">
+      <a href="https://swatwiki.com/u/caring" class="link-btn scan-line" target="_blank">swatbin</a>
+      <a href="https://doxbin.com/user/repeatinglove" class="link-btn scan-line" target="_blank">doxbin</a>
+    </div>
   </div>
-</div>
 
-<!-- Falling Particles Canvas -->
-<canvas id="fallingParticles"></canvas>
+  <!-- BACKGROUND MUSIC -->
+  <audio id="backgroundMusic" loop>
+    <source src="https://files.catbox.moe/w7a1z3.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
 
-<script>
-  // Title Rotator
-  const titles = ["convict", "<3", "wtf", ":3"];
-  let titleIndex = 0;
-  setInterval(() => {
-    document.title = titles[titleIndex];
-    titleIndex = (titleIndex + 1) % titles.length;
-  }, 100);
+  <!-- ENTER BUTTON -->
+  <button id="enterButton">enter</button>
 
-  // Smooth Typewriter Effect
-  const bios = ["i love you alexis", "my sweet girl"];
-  const bioElement = document.getElementById("bio");
+  <!-- FALLING PARTICLES -->
+  <canvas id="fallingParticles"></canvas>
 
-  let bioIndex = 0;
-  let charIndex = 0;
-  let isDeleting = false;
-  let typingSpeed = 100;
-  let lastTime = 0;
+  <script>
+    const enterButton = document.getElementById('enterButton');
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    const glitchContent = document.querySelector('.glitch');
+    const particlesContent = document.getElementById('particles-js');
+    const profileContent = document.querySelector('.profile-container');
+    const bioElement = document.getElementById('bio');
+    const bios = ["I love you alexis", "fuck all you niggas"];
+    let currentBioIndex = 0;
 
-  function smoothTypeWriter(timestamp) {
-    if (!lastTime || timestamp - lastTime >= typingSpeed) {
-      const currentText = bios[bioIndex];
-      if (isDeleting) {
-        charIndex--;
-        if (charIndex < 0) {
-          isDeleting = false;
-          bioIndex = (bioIndex + 1) % bios.length;
-          typingSpeed = 300;
+    function typeBio() {
+      bioElement.textContent = "";
+      const bioText = bios[currentBioIndex];
+      let i = 0;
+
+      const typingInterval = setInterval(() => {
+        bioElement.textContent += bioText.charAt(i);
+        i++;
+        if (i === bioText.length) {
+          clearInterval(typingInterval);
+          setTimeout(() => {
+            currentBioIndex = (currentBioIndex + 1) % bios.length;
+            typeBio();
+          }, 2000);
         }
-      } else {
-        charIndex++;
-        if (charIndex > currentText.length) {
-          isDeleting = true;
-          typingSpeed = 2000;
-        }
-      }
-
-      bioElement.innerHTML = currentText.substring(0, charIndex);
-      lastTime = timestamp;
-      typingSpeed = isDeleting ? 50 : 100;
+      }, 100);
     }
 
-    requestAnimationFrame(smoothTypeWriter);
-  }
-
-  function enterSite() {
-    document.getElementById("landing").classList.add("hidden");
-    document.getElementById("profile").classList.remove("hidden");
-    document.getElementById("backgroundMusic").play();
-    requestAnimationFrame(smoothTypeWriter);
-  }
-
-  // Falling Particle Animation
-  const canvas = document.getElementById('fallingParticles');
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  class Particle {
-    constructor() {
-      this.x = Math.random() * canvas.width;
-      this.y = Math.random() * -canvas.height;
-      this.velocityY = Math.random() * 1 + 1;
-      this.size = 8;
-      this.character = '⬩';
-      this.color = 'white';
-    }
-
-    update() {
-      this.y += this.velocityY;
-      if (this.y > canvas.height) {
-        this.y = -this.size;
-        this.x = Math.random() * canvas.width;
-      }
-    }
-
-    draw() {
-      ctx.font = `${this.size}px Courier New`;
-      ctx.fillStyle = this.color;
-      ctx.fillText(this.character, this.x, this.y);
-    }
-  }
-
-  const fallingParticles = [];
-  for (let i = 0; i < 25; i++) {
-    fallingParticles.push(new Particle());
-  }
-
-  function animateFallingParticles() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    fallingParticles.forEach(p => {
-      p.update();
-      p.draw();
+    enterButton.addEventListener('click', () => {
+      backgroundMusic.play();
+      enterButton.style.display = 'none';
+      glitchContent.classList.remove('hidden-content');
+      particlesContent.classList.remove('hidden-content');
+      profileContent.classList.remove('hidden-content');
+      typeBio();
     });
-    requestAnimationFrame(animateFallingParticles);
-  }
 
-  animateFallingParticles();
-</script>
+    const canvas = document.getElementById('fallingParticles');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * -canvas.height;
+        this.velocityY = Math.random() * 1 + 1;
+        this.size = 8;
+        this.character = '⬩';
+        this.color = 'white';
+      }
+
+      update() {
+        this.y += this.velocityY;
+        if (this.y > canvas.height) {
+          this.y = -this.size;
+          this.x = Math.random() * canvas.width;
+        }
+      }
+
+      draw() {
+        ctx.font = `${this.size}px 'Courier New', monospace`;
+        ctx.fillStyle = this.color;
+        ctx.fillText(this.character, this.x, this.y);
+      }
+    }
+
+    const fallingParticles = [];
+    for (let i = 0; i < 25; i++) {
+      fallingParticles.push(new Particle());
+    }
+
+    function animateFallingParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      fallingParticles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateFallingParticles);
+    }
+
+    animateFallingParticles();
+  </script>
 </body>
 </html>
