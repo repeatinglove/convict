@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>taunt</title>
-  
+
   <!-- FontAwesome -->
   <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/js/all.min.js"></script>
 
@@ -169,18 +169,16 @@
     .profile-handle, .link-btn {
       background: transparent;
     }
-
   </style>
-  
+
   <script>
-    const titles = ["convict", "<3", "wtf", ":3", "nigger", "taunt"]; 
+    const titles = ["taunt", "<3", "wtf", ":3"];
     let titleIndex = 0;
     setInterval(() => {
       document.title = titles[titleIndex];
       titleIndex = (titleIndex + 1) % titles.length;
     }, 100);
   </script>
-
 </head>
 <body>
   <!-- GLITCH DOLL -->
@@ -226,23 +224,17 @@
     const particlesContent = document.getElementById('particles-js');
     const profileContent = document.querySelector('.profile-container');
     const bioElement = document.getElementById('bio');
-    const bios = ["fuck all you niggas"];
-    let currentBioIndex = 0;
+
+    const bioText = "@rockingdior on dc"; // Set your static message here
 
     function typeBio() {
       bioElement.textContent = "";
-      const bioText = bios[currentBioIndex];
       let i = 0;
-
       const typingInterval = setInterval(() => {
         bioElement.textContent += bioText.charAt(i);
         i++;
         if (i === bioText.length) {
-          clearInterval(typingInterval);
-          setTimeout(() => {
-            currentBioIndex = (currentBioIndex + 1) % bios.length;
-            typeBio();
-          }, 2000);
+          clearInterval(typingInterval); // Stop after typing
         }
       }, 100);
     }
@@ -256,6 +248,7 @@
       typeBio();
     });
 
+    // Falling particles animation
     const canvas = document.getElementById('fallingParticles');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
