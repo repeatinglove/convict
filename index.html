@@ -40,7 +40,7 @@
       top: 0%;
       left: 50%;
       transform: translateX(-50%);
-      width: 120px;
+      width: 150px;
       animation: swing 3s ease-in-out infinite;
       transform-origin: top center;
       filter: grayscale(100%) contrast(120%) brightness(80%);
@@ -191,20 +191,6 @@
   <!-- PARTICLES BACKGROUND -->
   <div id="particles-js" class="hidden-content"></div>
 
-  <!-- PROFILE SECTION -->
-  <div class="profile-container hidden-content">
-    <div class="profile-img-wrapper scan-line">
-      <img src="https://files.catbox.moe/7jxqkf.jpg" alt="Profile" class="profile-img">
-    </div>
-    <div class="profile-handle scan-line">
-      <span id="bio" class="typing"></span>
-    </div>
-    <div class="profile-links">
-      <a href="https://t.me/taunt1ng" class="link-btn scan-line" target="_blank">telegram</a>
-      <a href="https://doxbin.com/user/upondeath" class="link-btn scan-line" target="_blank">doxbin</a>
-    </div>
-  </div>
-
   <!-- BACKGROUND MUSIC -->
   <audio id="backgroundMusic" loop>
     <source src="https://files.catbox.moe/ijg9dw.mp3" type="audio/mp3">
@@ -222,29 +208,12 @@
     const backgroundMusic = document.getElementById('backgroundMusic');
     const glitchContent = document.querySelector('.glitch');
     const particlesContent = document.getElementById('particles-js');
-    const profileContent = document.querySelector('.profile-container');
-    const bioElement = document.getElementById('bio');
-
-    const bioText = "im js better"; // Set your static message here
-
-    function typeBio() {
-      bioElement.textContent = "";
-      let i = 0;
-      const typingInterval = setInterval(() => {
-        bioElement.textContent += bioText.charAt(i);
-        i++;
-        if (i === bioText.length) {
-          clearInterval(typingInterval); // Stop after typing
-        }
-      }, 100);
-    }
-
+ 
     enterButton.addEventListener('click', () => {
       backgroundMusic.play();
       enterButton.style.display = 'none';
       glitchContent.classList.remove('hidden-content');
       particlesContent.classList.remove('hidden-content');
-      profileContent.classList.remove('hidden-content');
       typeBio();
     });
 
