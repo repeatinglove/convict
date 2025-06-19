@@ -172,12 +172,12 @@
   </style>
 
   <script>
-    const titles = ["taunt", "<3", "wtf", ":3", "poor", "nigger", "faggot"];
+    const titles = ["taunt", "<3", "wtf", ":3"];
     let titleIndex = 0;
     setInterval(() => {
       document.title = titles[titleIndex];
       titleIndex = (titleIndex + 1) % titles.length;
-    }, 5);
+    }, 100);
   </script>
 </head>
 <body>
@@ -229,7 +229,7 @@
         this.y = Math.random() * -canvas.height;
         this.velocityY = Math.random() * 1 + 1;
         this.size = 8;
-        this.character = '2';
+        this.character = '⬩';
         this.color = 'white';
       }
 
