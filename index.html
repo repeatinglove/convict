@@ -3,266 +3,198 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>taunt</title>
-
-  <!-- FontAwesome -->
-  <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/js/all.min.js"></script>
-
+  <title>Account Reviewer | Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body, html {
+    :root {
+      --bg: #000;
+      --fg: #fff;
+      --card-bg: rgba(0, 0, 0, 0.95);
+      --border: #fff;
+      --text-muted: #ccc;
+      --text-secondary: #aaa;
+      --shadow: rgba(255, 255, 255, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      cursor: default;
+    }
+
+    body {
       margin: 0;
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    .card {
+      position: relative;
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 50px 35px;
+      box-shadow: 0 0 50px var(--shadow);
+      max-width: 520px;
+      width: 85%;
+      text-align: center;
+      border: 2px solid var(--border);
+      backdrop-filter: blur(10px);
+      z-index: 2;
+      opacity: 1;
+      transform: none;
+      transition: background 0.4s ease, border 0.4s ease, color 0.4s ease;
+    }
+
+    .card h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: var(--fg);
+      text-shadow: 0 0 10px var(--fg);
+    }
+
+    .creator {
+      margin-bottom: 25px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    .card h2 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: var(--text-secondary);
+    }
+
+    .roles {
+      text-align: left;
+      font-size: 1rem;
+      line-height: 2rem;
+      background: none;
       padding: 0;
-      height: 100%;
-      overflow: hidden;
-      background-color: #000;
-      font-family: 'Courier New', monospace;
+      border: none;
     }
 
-    .hidden-content {
-      display: none;
+    .roles span {
+      display: flex;
+      align-items: center;
+      margin: 8px 0;
+      font-weight: 500;
+      font-size: 1.05rem;
+      font-family: 'Outfit', sans-serif;
+      opacity: 0.9;
     }
 
-    .glitch::before {
-      content: "";
+    .emoji {
+      margin-right: 12px;
+      font-size: 1.1rem;
+    }
+
+    strong {
+      color: var(--fg);
+    }
+
+    .toggle-theme {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: repeating-linear-gradient(transparent, transparent 2px, #111 2px, #111 3px);
-      mix-blend-mode: multiply;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .doll-wrapper {
-      position: absolute;
-      top: 0%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 150px;
-      animation: swing 3s ease-in-out infinite;
-      transform-origin: top center;
-      filter: grayscale(100%) contrast(120%) brightness(80%);
-    }
-
-    .doll {
-      width: 100%;
-      display: block;
-    }
-
-    @keyframes swing {
-      0% { transform: translateX(-50%) rotate(5deg); }
-      50% { transform: translateX(-50%) rotate(-5deg); }
-      100% { transform: translateX(-50%) rotate(5deg); }
-    }
-
-    #particles-js {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: -1;
-    }
-
-    #enterButton {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      padding: 20px 40px;
-      background-color: #000;
-      color: #ffffff;
-      border: 2px solid #000000;
-      font-size: 24px;
-      font-family: 'Courier New', monospace;
-      cursor: pointer;
-      text-align: center;
-      text-transform: uppercase;
-      z-index: 3;
-    }
-
-    .profile-container {
-      position: absolute;
-      top: 60%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      color: white;
-      font-family: 'Courier New', monospace;
-      z-index: 2;
-    }
-
-    .profile-img-wrapper {
-      width: 130px;
-      height: 130px;
-      margin: 0 auto 15px auto;
-      border-radius: 50%;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .profile-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-    }
-
-    .typing {
-      display: inline-block;
-      white-space: nowrap;
-      overflow: hidden;
-      width: 0;
-      animation: typing 2s steps(30) 1s forwards, blink 0.75s step-end infinite;
-    }
-
-    @keyframes typing {
-      0% { width: 0; }
-      100% { width: 100%; }
-    }
-
-    @keyframes blink {
-      50% { border-color: transparent; }
-    }
-
-    .scan-line::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: repeating-linear-gradient(
-        transparent,
-        transparent 2px,
-        rgba(0, 0, 0, 0.4) 2px,
-        rgba(0, 0, 0, 0.4) 4px
-      );
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .profile-img-wrapper.scan-line,
-    .profile-handle.scan-line,
-    .link-btn.scan-line {
-      position: relative;
-      z-index: 2;
-    }
-
-    .link-btn {
-      display: inline-block;
-      color: white;
-      text-decoration: none;
-      margin: 0 5px;
-      font-family: 'Courier New', monospace;
-      position: relative;
-      z-index: 2;
-    }
-
-    .profile-handle {
-      position: relative;
-      font-size: 16px;
-    }
-
-    .profile-handle, .link-btn {
+      top: 25px;
+      right: 25px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: 2px solid currentColor;
       background: transparent;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 10;
+      color: var(--fg);
+      transition: all 0.3s ease;
+    }
+
+    .toggle-theme:hover {
+      opacity: 0.8;
     }
   </style>
-
-  <script>
-    const titles = ["taunt", "<3", "wtf", ":3"];
-    let titleIndex = 0;
-    setInterval(() => {
-      document.title = titles[titleIndex];
-      titleIndex = (titleIndex + 1) % titles.length;
-    }, 100);
-  </script>
 </head>
 <body>
-  <!-- GLITCH DOLL -->
-  <div class="glitch hidden-content">
-    <div class="doll-wrapper">
-      <img src="https://files.catbox.moe/vjizjl.png" alt="Hanging Doll" class="doll">
+
+  <div class="card" id="card">
+    <h1>🕵🏻 Account Reviewer Portfolio</h1>
+    <div class="creator">Created by Taunt.gov</div>
+    <h2>Currently Checking For:</h2>
+    <div class="roles" id="roles">
+      <span><span class="emoji"></span><strong></strong></span>
+      <span><span class="emoji"></span><strong></strong></span>
+      <span><span class="emoji"></span><strong></strong></span>
+      <span><span class="emoji"></span><strong></strong></span>
+      <span><span class="emoji"></span><strong></strong></span>
+      <span><span class="emoji"></span><strong></strong></span>
+      <span><span class="emoji"></span><strong></strong></span>
+      <span style="margin-top: 20px;"><span class="emoji"></span><strong></strong></span>
     </div>
   </div>
 
-  <!-- PARTICLES BACKGROUND -->
-  <div id="particles-js" class="hidden-content"></div>
-
-  <!-- BACKGROUND MUSIC -->
-  <audio id="backgroundMusic" loop>
-    <source src="https://files.catbox.moe/ijg9dw.mp3" type="audio/mp3">
+  <audio id="bgMusic" autoplay loop>
+    <source src="https://files.catbox.moe/911vwi.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
 
-  <!-- ENTER BUTTON -->
-  <button id="enterButton">enter</button>
-
-  <!-- FALLING PARTICLES -->
-  <canvas id="fallingParticles"></canvas>
-
   <script>
-    const enterButton = document.getElementById('enterButton');
-    const backgroundMusic = document.getElementById('backgroundMusic');
-    const glitchContent = document.querySelector('.glitch');
-    const particlesContent = document.getElementById('particles-js');
- 
-    enterButton.addEventListener('click', () => {
-      backgroundMusic.play();
-      enterButton.style.display = 'none';
-      glitchContent.classList.remove('hidden-content');
-      particlesContent.classList.remove('hidden-content');
-      typeBio();
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+    }
+
+    // Music handling
+    window.addEventListener('DOMContentLoaded', () => {
+      const music = document.getElementById('bgMusic');
+      music.volume = 0.10;
+      const playPromise = music.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          document.body.addEventListener('click', () => music.play(), { once: true });
+        });
+      }
     });
 
-    // Falling particles animation
-    const canvas = document.getElementById('fallingParticles');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const roles = [
+      "🕵🏻 HEAD ACCOUNT REVIEWER – RAGERP",
+      "🕵🏻 HEAD ACCOUNT REVIEWER – ASIRERZ",
+      "🕵🏻 HEAD ACCOUNT REVIEWER – PASTLIFERP",
+      "🕵🏻 HEAD ACCOUNT REVIEWER – FELONRP",
+      "🕵🏻 ACCOUNT REVIEWER – CASHFLOWRP",
+      "🕵🏻 DM ME FOR INQUIRIES - INNOCENT.GOV"
+    ];
 
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * -canvas.height;
-        this.velocityY = Math.random() * 1 + 1;
-        this.size = 8;
-        this.character = '⬩';
-        this.color = 'white';
-      }
+    const spans = document.querySelectorAll("#roles span strong");
 
-      update() {
-        this.y += this.velocityY;
-        if (this.y > canvas.height) {
-          this.y = -this.size;
-          this.x = Math.random() * canvas.width;
+    function typeWriter(text, element, delay = 30) {
+      return new Promise((resolve) => {
+        let i = 0;
+        function typeChar() {
+          if (i < text.length) {
+            element.textContent += text.charAt(i);
+            i++;
+            setTimeout(typeChar, delay);
+          } else {
+            resolve();
+          }
         }
-      }
-
-      draw() {
-        ctx.font = `${this.size}px 'Courier New', monospace`;
-        ctx.fillStyle = this.color;
-        ctx.fillText(this.character, this.x, this.y);
-      }
-    }
-
-    const fallingParticles = [];
-    for (let i = 0; i < 25; i++) {
-      fallingParticles.push(new Particle());
-    }
-
-    function animateFallingParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      fallingParticles.forEach(p => {
-        p.update();
-        p.draw();
+        typeChar();
       });
-      requestAnimationFrame(animateFallingParticles);
     }
 
-    animateFallingParticles();
+    async function revealRoles() {
+      for (let i = 0; i < roles.length; i++) {
+        await typeWriter(roles[i], spans[i]);
+      }
+    }
+
+    revealRoles();
   </script>
 </body>
 </html>
