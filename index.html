@@ -1,200 +1,411 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Account Reviewer | Portfolio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Guilty</title>
+  <meta name="description" content="Paid Screensharer" />
   <style>
     :root {
-      --bg: #000;
-      --fg: #fff;
-      --card-bg: rgba(0, 0, 0, 0.95);
-      --border: #fff;
-      --text-muted: #ccc;
-      --text-secondary: #aaa;
-      --shadow: rgba(255, 255, 255, 0.1);
+      --bg: #0b0b0b;
+      --card: #0f0f0f;
+      --muted: #bfbfbf;
+      --accent: #ffffff;
+      --radius: 14px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', 'Courier New', monospace;
+      --glow: 0 0 8px #fff8;
     }
-
     * {
       box-sizing: border-box;
-      cursor: default;
     }
-
-    body {
+    html, body {
+      height: 100%;
       margin: 0;
-      font-family: 'Outfit', sans-serif;
-      background: var(--bg);
-      color: var(--fg);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(180deg, var(--bg), #070707);
+      color: var(--accent);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow: hidden; /* remove scrollbars */
+    }
+    .wrap {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 28px;
+      padding: 36px 28px;
+      align-items: start;
+      max-width: 940px;
+      margin: 0 auto;
+    }
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.04);
+      padding: 26px 22px;
+      border-radius: var(--radius);
+      backdrop-filter: blur(6px);
       display: flex;
+      flex-direction: column;
+      gap: 16px;
+      user-select: text;
+    }
+    .logo {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .logo .mark {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #fff, #ccc);
+      display: flex;
+      align-items: center;
       justify-content: center;
-      align-items: center;
-      height: 100vh;
-      overflow: hidden;
-      position: relative;
-      transition: background 0.4s ease, color 0.4s ease;
+      color: #000;
+      font-weight: 700;
+      font-size: 22px;
+      user-select: none;
     }
-
-    .card {
-      position: relative;
-      background: var(--card-bg);
-      border-radius: 20px;
-      padding: 50px 35px;
-      box-shadow: 0 0 50px var(--shadow);
-      max-width: 520px;
-      width: 85%;
-      text-align: center;
-      border: 2px solid var(--border);
-      backdrop-filter: blur(10px);
-      z-index: 2;
-      opacity: 1;
-      transform: none;
-      transition: background 0.4s ease, border 0.4s ease, color 0.4s ease;
+    h1 {
+      margin: 14px 0 6px;
+      font-size: 21px;
+      letter-spacing: -0.02em;
     }
-
-    .card h1 {
-      font-size: 2rem;
-      margin-bottom: 10px;
-      color: var(--fg);
-      text-shadow: 0 0 10px var(--fg);
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 14px;
     }
-
-    .creator {
-      margin-bottom: 25px;
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      letter-spacing: 1px;
-    }
-
-    .card h2 {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-      color: var(--text-secondary);
-    }
-
     .roles {
-      text-align: left;
-      font-size: 1rem;
-      line-height: 2rem;
-      background: none;
-      padding: 0;
-      border: none;
-    }
-
-    .roles span {
       display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+      height: calc((1.5em + 6px) * 16); /* increased to ~16 lines tall */
+      font-size: 14px;
+      line-height: 1.5;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none;  /* IE 10+ */
+    }
+    .roles::-webkit-scrollbar {
+      width: 0px;
+      background: transparent; /* Chrome/Safari/Webkit */
+    }
+    .role-pill {
+      padding: 11px 14px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.04);
+      font-weight: 600;
+      color: var(--accent);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
       align-items: center;
-      margin: 8px 0;
-      font-weight: 500;
-      font-size: 1.05rem;
-      font-family: 'Outfit', sans-serif;
-      opacity: 0.9;
-    }
-
-    .emoji {
-      margin-right: 12px;
-      font-size: 1.1rem;
-    }
-
-    strong {
-      color: var(--fg);
-    }
-
-    .toggle-theme {
-      position: absolute;
-      top: 25px;
-      right: 25px;
-      padding: 10px 20px;
-      border-radius: 8px;
-      border: 2px solid currentColor;
+      gap: 8px;
+      padding: 11px 16px;
+      border-radius: 12px;
       background: transparent;
-      font-weight: bold;
+      border: 1px solid rgba(255,255,255,0.08);
       cursor: pointer;
-      z-index: 10;
-      color: var(--fg);
-      transition: all 0.3s ease;
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      transition: background-color 0.2s ease;
+    }
+    .btn:hover {
+      background-color: rgba(255,255,255,0.10);
+    }
+    .footer {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 14px;
+      user-select: none;
+    }
+    .showcase {
+      background: linear-gradient(180deg, rgba(255,255,255,0.012), rgba(255,255,255,0.008));
+      border: 1px solid rgba(255,255,255,0.03);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-height: 400px;
+      user-select: text;
+      overflow: hidden;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      user-select: none;
+    }
+    .window-dots {
+      display: flex;
+      gap: 8px;
+    }
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+    .hero-text {
+      width: 100%;
+    }
+    .headline {
+      font-size: 28px;
+      margin: 0;
+      line-height: 1.15;
+    }
+    .tagline {
+      color: var(--muted);
+      margin-top: 6px;
+      font-size: 16px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 24px;
+      width: 100%;
+    }
+    .card {
+      background: var(--card);
+      padding: 18px 20px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.025);
+      display: flex;
+      flex-direction: column;
+    }
+    .card h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+    /* Terminal styles */
+    .terminal {
+      background: #000;
+      color: #fff;
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.5;
+      border-radius: 14px;
+      padding: 20px 24px;
+      height: calc((1.5em + 6px) * 20); /* terminal height for 20 lines */
+      overflow: hidden;
+      box-shadow: var(--glow);
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
-    .toggle-theme:hover {
-      opacity: 0.8;
+    .terminal-line {
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 0 0 6px 0;
+      opacity: 0;
+      transform: translateY(12px);
+      animation-fill-mode: forwards;
+      animation-name: fadeInUp;
+      animation-timing-function: ease-out;
+      animation-duration: 0.35s;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
 <body>
+  <div class="wrap">
+    <aside class="panel" aria-label="Profile information">
+      <div class="logo">
+        <div class="mark" aria-hidden="true">TY</div>
+        <div>
+          <h1>guilty</h1>
+          <div class="subtitle">Paid Screensharer + Account Reviewer</div>
+        </div>
+      </div>
 
-  <div class="card" id="card">
-    <h1>🕵🏻 Account Reviewer Portfolio</h1>
-    <div class="creator">Created by Taunt.gov</div>
-    <h2>Currently Checking For:</h2>
-    <div class="roles" id="roles">
-      <span><span class="emoji"></span><strong></strong></span>
-      <span><span class="emoji"></span><strong></strong></span>
-      <span><span class="emoji"></span><strong></strong></span>
-      <span><span class="emoji"></span><strong></strong></span>
-      <span><span class="emoji"></span><strong></strong></span>
-      <span><span class="emoji"></span><strong></strong></span>
-      <span><span class="emoji"></span><strong></strong></span>
-      <span style="margin-top: 20px;"><span class="emoji"></span><strong></strong></span>
-    </div>
+      <div>
+        <div class="roles" aria-label="Roles list">
+          <div class="role-pill">Head Account Reviewer</div>
+          <div class="role-pill">Rage RP Head Account Reviewer</div>
+          <div class="role-pill">PastlifeRP Account Reviewer</div>
+          <div class="role-pill">Traprp Account Reviewer</div>
+          <div class="role-pill">PurginRP Account Reviewer</div>
+          <div class="role-pill">FelonRP Account Reviewer</div>
+          <div class="role-pill">CashFlowRP Account Reviewer</div>
+          <div class="role-pill">BankrollRP Account Reviewer</div>
+          <div class="role-pill">AsireRZ Account Reviewer</div>
+        </div>
+      </div>
+
+      <nav class="links" aria-label="Contact links">
+        <a class="btn" href="gxilty.xyz">Contact</a>
+        <a class="btn" href="https://discord.com/users/1050643297527418910" target="_blank" rel="noopener">Discord</a>
+        <a class="btn" href="https://github.com/gxiltyy" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+
+      <div style="margin-top: 16px; font-size: 14px; color: var(--muted)">Quick links</div>
+      <div style="display:flex; gap:12px; margin-top:8px;">
+        <a class="btn" href="https://gxilty.xyz" target="_blank" rel="noopener">Website</a>
+        <a class="btn" href="#" download="guilty.txt">Download CV</a>
+      </div>
+
+      <div class="footer">
+        <div>based in europe</div>
+        <div>Available For PC Checks</div>
+      </div>
+    </aside>
+
+    <main class="showcase" aria-label="Live forensic terminal and portfolio details">
+      <header class="topbar">
+        <div class="window-dots" aria-hidden="true">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+        <div style="font-size:14px; color: var(--muted);">Portfolio • Live Forensic Scan Feed</div>
+      </header>
+
+      <section class="hero-text">
+        <h2 class="headline">Professional and Trustworthy.</h2>
+        <p class="tagline">I check pc's and find valuable stuff to get rid of cheaters</p>
+
+        <div class="grid" style="margin-top: 24px;">
+          <article class="card" aria-live="polite" aria-atomic="false" aria-label="Live forensic terminal">
+            <h3>Live Forensic Terminal</h3>
+            <div class="terminal" id="terminal" role="log"></div>
+          </article>
+        </div>
+      </section>
+    </main>
   </div>
 
-  <audio id="bgMusic" autoplay loop>
-    <source src="https://files.catbox.moe/911vwi.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
+<script>
+(() => {
+  const terminal = document.getElementById('terminal');
+  const maxLines = 20; // terminal lines count
+  const messages = [
+    "[00:01:12] Validating player data integrity...",
+    "[00:01:14] Checking process integrity...",
+    "[00:01:16] Verifying digital signatures on executable files...",
+    "[00:01:18] Analyzing login patterns for anomalies...",
+    "[00:01:21] Hash match verified: kernel32.dll",
+    "[00:01:23] Scanning for unauthorized running services...",
+    "[00:01:25] Detecting hidden network connections...",
+    "[00:01:28] Monitoring USB device history logs...",
+    "[00:01:30] Cross-referencing firewall logs with external IPs...",
+    "[00:01:33] Suspicious login pattern detected: multiple rapid attempts",
+    "[00:01:35] Checking system event logs for error spikes...",
+    "[00:01:37] Verifying integrity of system DLLs...",
+    "[00:01:40] Enumerating running processes with high privileges...",
+    "[00:01:42] Identifying newly installed software packages...",
+    "[00:01:45] Capturing snapshot of current TCP connections...",
+    "[00:01:47] Detecting abnormal file system activity...",
+    "[00:01:50] Confirming antivirus signatures are up-to-date...",
+    "[00:01:52] Examining recent PowerShell command history...",
+    "[00:01:54] Auditing recent user account changes...",
+    "[00:01:56] Parsing security event logs for suspicious entries...",
+    "[00:01:58] Collecting forensic evidence from volatile memory...",
+    "[00:02:00] Cross-checking hashes against known malware signatures...",
+    "[00:02:02] Archiving audit report for analysis...",
+    "[00:02:05] Scan complete. No critical issues found.",
+  ];
 
-  <script>
-    function toggleTheme() {
-      document.body.classList.toggle('light-mode');
-    }
+  const lines = [];
 
-    // Music handling
-    window.addEventListener('DOMContentLoaded', () => {
-      const music = document.getElementById('bgMusic');
-      music.volume = 0.10;
-      const playPromise = music.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          document.body.addEventListener('click', () => music.play(), { once: true });
-        });
-      }
+  function addLine(text) {
+    const line = document.createElement('div');
+    line.className = 'terminal-line';
+    line.textContent = text;
+    terminal.appendChild(line);
+    requestAnimationFrame(() => {
+      line.style.opacity = '1';
+      line.style.transform = 'translateY(0)';
     });
+    lines.push(line);
 
-    const roles = [
-      "🕵🏻 Head Account Reviewer – RageRP",
-      "🕵🏻 Head Account Reviewer – AsireRZ",
-      "🕵🏻 Head Account Reviewer – PastLifeRP",
-      "🕵🏻 Head Account Reviewer – FelonRP",
-      "🕵🏻 Account Reviewer– CashflowRP",
-      "🕵🏻 DM Me For Inquiries - Taunt.gov"
-    ];
-
-    const spans = document.querySelectorAll("#roles span strong");
-
-    function typeWriter(text, element, delay = 30) {
-      return new Promise((resolve) => {
-        let i = 0;
-        function typeChar() {
-          if (i < text.length) {
-            element.textContent += text.charAt(i);
-            i++;
-            setTimeout(typeChar, delay);
-          } else {
-            resolve();
-          }
-        }
-        typeChar();
-      });
+    if (lines.length > maxLines) {
+      const oldLine = lines.shift();
+      oldLine.style.transition = 'opacity 0.5s ease';
+      oldLine.style.opacity = '0';
+      setTimeout(() => oldLine.remove(), 500);
     }
+  }
 
-    async function revealRoles() {
-      for (let i = 0; i < roles.length; i++) {
-        await typeWriter(roles[i], spans[i]);
+  let idx = 0;
+  function next() {
+    addLine(messages[idx]);
+    idx = (idx + 1) % messages.length;
+  }
+
+  for (let i = 0; i < 7; i++) next();
+
+  setInterval(next, 2200);
+})();
+
+(function() {
+  let devtoolsOpen = false;
+  const threshold = 160; // px threshold for detecting devtools open
+
+  function closePage() {
+    // Try to close the window
+    window.close();
+    // Fallback: navigate away to blank page if close is blocked
+    setTimeout(() => {
+      document.body.innerHTML = '';
+      location.href = 'about:blank';
+    }, 50);
+  }
+
+  function detectDevTools() {
+    const widthDiff = window.outerWidth - window.innerWidth > threshold;
+    const heightDiff = window.outerHeight - window.innerHeight > threshold;
+    if (widthDiff || heightDiff) {
+      if (!devtoolsOpen) {
+        devtoolsOpen = true;
+        closePage();
       }
+    } else {
+      devtoolsOpen = false;
     }
+  }
 
-    revealRoles();
-  </script>
+  window.addEventListener('resize', detectDevTools);
+  window.addEventListener('load', detectDevTools);
+
+  window.addEventListener('keydown', function(e) {
+    if (
+      e.key === 'F12' ||
+      (e.ctrlKey && e.shiftKey && ['I', 'C', 'J'].includes(e.key.toUpperCase())) ||
+      (e.ctrlKey && e.key.toUpperCase() === 'U')
+    ) {
+      e.preventDefault();
+      e.stopPropagation();
+      closePage();
+    }
+  });
+
+  window.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+  });
+})();
+</script>
 </body>
 </html>
