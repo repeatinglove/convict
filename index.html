@@ -1,32 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>×</title>
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>taunt</title>
+
+  <!-- FontAwesome -->
+  <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/js/all.min.js"></script>
+
   <style>
     body, html {
       margin: 0;
       padding: 0;
       height: 100%;
       overflow: hidden;
-      background-color: #000; /* Black background */
+      background-color: #000;
+      font-family: 'Courier New', monospace;
     }
 
-    /* Swinging doll */
-    .doll {
+    .hidden-content {
+      display: none;
+    }
+
+    .glitch::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(transparent, transparent 2px, #111 2px, #111 3px);
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .doll-wrapper {
       position: absolute;
       top: 0%;
       left: 50%;
       transform: translateX(-50%);
-      width: 150px; /* Adjust size of the doll */
-      animation: swing 4s ease-in-out infinite;
+      width: 150px;
+      animation: swing 3s ease-in-out infinite;
       transform-origin: top center;
       filter: grayscale(100%) contrast(120%) brightness(80%);
     }
 
-    /* Swing animation */
+    .doll {
+      width: 100%;
+      display: block;
+    }
+
     @keyframes swing {
       0% { transform: translateX(-50%) rotate(5deg); }
       50% { transform: translateX(-50%) rotate(-5deg); }
@@ -34,107 +58,211 @@
     }
 
     #particles-js {
-      width: 100%; 
+      width: 100%;
       height: 100%;
       position: absolute;
       top: 0;
       left: 0;
-      z-index: -1; /* Place particles behind the doll */
+      z-index: -1;
+    }
+
+    #enterButton {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px 40px;
+      background-color: #000;
+      color: #ffffff;
+      border: 2px solid #000000;
+      font-size: 24px;
+      font-family: 'Courier New', monospace;
+      cursor: pointer;
+      text-align: center;
+      text-transform: uppercase;
+      z-index: 3;
+    }
+
+    .profile-container {
+      position: absolute;
+      top: 60%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: white;
+      font-family: 'Courier New', monospace;
+      z-index: 2;
+    }
+
+    .profile-img-wrapper {
+      width: 130px;
+      height: 130px;
+      margin: 0 auto 15px auto;
+      border-radius: 50%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .profile-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .typing {
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation: typing 2s steps(30) 1s forwards, blink 0.75s step-end infinite;
+    }
+
+    @keyframes typing {
+      0% { width: 0; }
+      100% { width: 100%; }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+
+    .scan-line::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.4) 2px,
+        rgba(0, 0, 0, 0.4) 4px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .profile-img-wrapper.scan-line,
+    .profile-handle.scan-line,
+    .link-btn.scan-line {
+      position: relative;
+      z-index: 2;
+    }
+
+    .link-btn {
+      display: inline-block;
+      color: white;
+      text-decoration: none;
+      margin: 0 5px;
+      font-family: 'Courier New', monospace;
+      position: relative;
+      z-index: 2;
+    }
+
+    .profile-handle {
+      position: relative;
+      font-size: 16px;
+    }
+
+    .profile-handle, .link-btn {
+      background: transparent;
     }
   </style>
+
+  <script>
+    const titles = ["guilty", "<3", "wtf", ":3", "nigger", "kys", "fag"];
+    let titleIndex = 0;
+    setInterval(() => {
+      document.title = titles[titleIndex];
+      titleIndex = (titleIndex + 1) % titles.length;
+    }, 100);
+  </script>
 </head>
 <body>
-  <!-- Hanging Doll Image -->
-  <img src="https://files.catbox.moe/vjizjl.png" alt="Hanging Doll" class="doll">
-  
-  <!-- Particles background -->
-  <div id="particles-js"></div>
+  <!-- GLITCH DOLL -->
+  <div class="glitch hidden-content">
+    <div class="doll-wrapper">
+      <img src="https://files.catbox.moe/vjizjl.png" alt="Hanging Doll" class="doll">
+    </div>
+  </div>
 
-  <!-- Falling '⬩' Particles -->
-  <canvas id="fallingParticles"></canvas>
+  <!-- PARTICLES BACKGROUND -->
+  <div id="particles-js" class="hidden-content"></div>
 
-  <!-- Background audio -->
-  <audio id="background-audio" loop>
-    <source src="https://files.catbox.moe/ijg9dw.mp3" type="audio/mpeg">
+  <!-- BACKGROUND MUSIC -->
+  <audio id="backgroundMusic" loop>
+    <source src="https://files.catbox.moe/ijg9dw.mp3" type="audio/mp3">
     Your browser does not support the audio element.
   </audio>
 
+  <!-- ENTER BUTTON -->
+  <button id="enterButton">enter</button>
+
+  <!-- FALLING PARTICLES -->
+  <canvas id="fallingParticles"></canvas>
+
   <script>
-    // Set up the canvas for falling particles
+    const enterButton = document.getElementById('enterButton');
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    const glitchContent = document.querySelector('.glitch');
+    const particlesContent = document.getElementById('particles-js');
+ 
+    enterButton.addEventListener('click', () => {
+      backgroundMusic.play();
+      enterButton.style.display = 'none';
+      glitchContent.classList.remove('hidden-content');
+      particlesContent.classList.remove('hidden-content');
+      typeBio();
+    });
+
+    // Falling particles animation
     const canvas = document.getElementById('fallingParticles');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Particle class for falling "⬩" particles
     class Particle {
-        constructor() {
-            this.x = Math.random() * canvas.width; 
-            this.y = Math.random() * -canvas.height; // Start above the canvas
-            this.velocityY = Math.random() * 1 + 1; // Random fall speed between 1 and 2
-            this.size = 8; // Fixed size for visibility
-            this.character = '⬩'; // Particle character
-            this.color = 'white'; // Particle color
-        }
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * -canvas.height;
+        this.velocityY = Math.random() * 1 + 1;
+        this.size = 0;
+        this.character = '⬩';
+        this.color = 'white';
+      }
 
-        update() {
-            this.y += this.velocityY; // Move particle down
-
-            // Reset particle to the top if it falls off the screen
-            if (this.y > canvas.height) {
-                this.y = -this.size;
-                this.x = Math.random() * canvas.width; // Random horizontal position for resetting
-            }
+      update() {
+        this.y += this.velocityY;
+        if (this.y > canvas.height) {
+          this.y = -this.size;
+          this.x = Math.random() * canvas.width;
         }
+      }
 
-        draw() {
-            ctx.font = `${this.size}px Arial`; // Set the font size
-            ctx.fillStyle = this.color; // Set color
-            ctx.fillText(this.character, this.x, this.y); // Draw the character at the updated position
-        }
+      draw() {
+        ctx.font = `${this.size}px 'Courier New', monospace`;
+        ctx.fillStyle = this.color;
+        ctx.fillText(this.character, this.x, this.y);
+      }
     }
 
     const fallingParticles = [];
-    // Limit the number of particles to 10
     for (let i = 0; i < 25; i++) {
-        fallingParticles.push(new Particle()); // Create 10 particles
+      fallingParticles.push(new Particle());
     }
 
     function animateFallingParticles() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
-
-        fallingParticles.forEach(particle => {
-            particle.update(); // Update position
-            particle.draw(); // Draw the particle
-        });
-
-        requestAnimationFrame(animateFallingParticles); // Loop animation
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      fallingParticles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateFallingParticles);
     }
 
-    animateFallingParticles(); // Start the animation for falling particles
-
-    // Adjust canvas size when window is resized
-        window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    });
-
-    // Play the background audio on user click or touch
-    window.addEventListener('click', () => {
-        const audio = document.getElementById('background-audio');
-        audio.play(); // Start audio when user clicks anywhere on the page
-    });
-
-    // Title Switching with Loop
-    const titles = ["convict", "<3", "wtf", ":3", "niggers"];
-    let titleIndex = 0;
-
-    // Change the title continuously
-    setInterval(() => {
-      document.title = titles[titleIndex];
-      titleIndex = (titleIndex + 1) % titles.length; // Reset to 0 after the last title
-    }, 250); // Change every 250ms
-
+    animateFallingParticles();
   </script>
 </body>
 </html>
