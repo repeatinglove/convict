@@ -1,199 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loading...</title>
-<style>
-  body {
-    margin: 0;
-    height: 100vh;
-    background: #000; /* full black */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: "Courier New", Courier, monospace;
-    overflow: hidden;
-    color: #fff; /* full white text */
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>taunt</title>
 
-  .overlay {
-    position: absolute;
-    top:0; left:0; right:0; bottom:0;
-    background: rgba(0,0,0,1); /* pure black */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    font-size: 22px;
-    user-select: none;
-    color: #fff; /* white */
-    transition: opacity 0.5s ease;
-  }
+  <!-- FontAwesome -->
+  <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/js/all.min.js"></script>
 
-  .player {
-    display: none;
-    text-align: center;
-  }
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background-color: #000;
+      font-family: 'Courier New', monospace;
+    }
 
-  .controls {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-  }
+    .hidden-content { display: none; }
 
-  .btn-circle {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: #000; /* pure black buttons */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    border: 1px solid #fff; /* white outline */
-  }
+    .glitch::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(transparent, transparent 2px, #111 2px, #111 3px);
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      z-index: 1;
+    }
 
-  .btn-circle:hover {
-    transform: scale(1.2);
-    background: #111; /* very dark hover */
-    box-shadow: 0 0 15px rgba(255,255,255,0.3);
-  }
+    .doll-wrapper {
+      position: absolute;
+      top: 0%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      animation: swing 3s ease-in-out infinite;
+      transform-origin: top center;
+      filter: grayscale(100%) contrast(120%) brightness(80%);
+    }
 
-  svg {
-    width: 24px;
-    height: 24px;
-    fill: #fff; /* icons white */
-    transition: fill 0.3s;
-  }
+    .doll { width: 100%; display: block; }
 
-  .btn-circle:hover svg {
-    fill: #fff; /* stays white */
-  }
+    @keyframes swing {
+      0% { transform: translateX(-50%) rotate(5deg); }
+      50% { transform: translateX(-50%) rotate(-5deg); }
+      100% { transform: translateX(-50%) rotate(5deg); }
+    }
 
-  audio {
-    display: none;
-  }
+    #particles-js { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: -1; }
 
-  .fade-in {
-    animation: fadeIn 1s ease forwards;
-    opacity: 0;
-  }
+    #enterButton {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px 40px;
+      background-color: #000; color: #ffffff;
+      border: 2px solid #000000;
+      font-size: 24px; font-family: 'Courier New', monospace;
+      cursor: pointer; text-align: center; text-transform: uppercase;
+      z-index: 3;
+    }
 
-  @keyframes fadeIn {
-    to { opacity: 1; }
-  }
-</style>
+    /* === AUDIO PLAYER === */
+    #playerToggle {
+      position: fixed; bottom: 20px; right: 20px;
+      background: #111; border: none; border-radius: 50%;
+      padding: 10px; cursor: pointer;
+      z-index: 10; width: 52px; height: 52px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    #playerToggle img { width: 32px; height: 32px; display: block; }
+
+    #audioPlayer {
+      position: fixed; bottom: 80px; right: 20px;
+      width: 220px; background: #111; color: white;
+      border: 1px solid #333; border-radius: 10px; padding: 10px;
+      display: none; text-align: center; font-size: 14px; z-index: 9;
+    }
+
+    #songTitle { margin-bottom: 8px; font-size: 14px; font-weight: bold; }
+
+    .controls button {
+      background: none; border: none; color: white;
+      font-size: 18px; margin: 0 8px; cursor: pointer;
+    }
+  </style>
+
+  <script>
+    const titles = ["guilty", "<3", "wtf", ":3", "nigger", "kys", "fag"];
+    let titleIndex = 0;
+    setInterval(() => {
+      document.title = titles[titleIndex];
+      titleIndex = (titleIndex + 1) % titles.length;
+    }, 100);
+  </script>
 </head>
 <body>
-
-<div class="overlay" id="startBtn">Click to Enter</div>
-
-<div class="player fade-in">
-  <audio id="audio"></audio>
-  <div class="controls">
-    <div class="btn-circle" id="prevBtn">
-      <svg viewBox="0 0 24 24">
-        <polygon points="11,12 18,18 18,6"></polygon>
-        <rect x="6" y="6" width="2" height="12"></rect>
-      </svg>
-    </div>
-    <div class="btn-circle" id="playPauseBtn">
-      <svg id="playIcon" viewBox="0 0 24 24">
-        <polygon points="8,5 19,12 8,19"></polygon>
-      </svg>
-      <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;">
-        <rect x="6" y="5" width="4" height="14"></rect>
-        <rect x="14" y="5" width="4" height="14"></rect>
-      </svg>
-    </div>
-    <div class="btn-circle" id="nextBtn">
-      <svg viewBox="0 0 24 24">
-        <polygon points="13,12 6,6 6,18"></polygon>
-        <rect x="16" y="6" width="2" height="12"></rect>
-      </svg>
+  <!-- GLITCH DOLL -->
+  <div class="glitch hidden-content">
+    <div class="doll-wrapper">
+      <img src="https://files.catbox.moe/xoyzvm.jpg" alt="Hanging Doll" class="doll">
     </div>
   </div>
-</div>
 
-<script>
-  const startBtn = document.getElementById('startBtn');
-  const player = document.querySelector('.player');
-  const audio = document.getElementById('audio');
-  const playPauseBtn = document.getElementById('playPauseBtn');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const playIcon = document.getElementById('playIcon');
-  const pauseIcon = document.getElementById('pauseIcon');
+  <!-- PARTICLES BACKGROUND -->
+  <div id="particles-js" class="hidden-content"></div>
 
-  const tracks = ['song1.mp3','song2.mp3','song3.mp3','song4.mp3'];
-  let currentTrack = 0;
+  <!-- BACKGROUND MUSIC -->
+  <audio id="backgroundMusic" loop>
+    <source src="https://files.catbox.moe/ijg9dw.mp3" type="audio/mp3">
+  </audio>
 
-  const titles = [":3", "lol", "cared", "nigger", "$", "fag"];
-  let titleIndex = 0;
+  <!-- ENTER BUTTON -->
+  <button id="enterButton">enter</button>
 
-  // Ensure default volume is 0.5
-  audio.volume = 0.5;
+  <!-- FALLING PARTICLES -->
+  <canvas id="fallingParticles"></canvas>
 
-  function updateTrack(play = true) {
-    audio.src = tracks[currentTrack];
-    audio.volume = 0.5;
-    if(play) {
-      audio.play();
-      playIcon.style.display = 'none';
-      pauseIcon.style.display = 'block';
-    } else {
-      playIcon.style.display = 'block';
-      pauseIcon.style.display = 'none';
+  <!-- MUSIC PLAYER -->
+  <button id="playerToggle">
+    <img src="ycyaoh.png" alt="Audio Icon">
+  </button>
+  <div id="audioPlayer">
+    <div id="songTitle">Loading...</div>
+    <div class="controls">
+      <button id="prevBtn"><i class="fas fa-backward"></i></button>
+      <button id="playPauseBtn"><i class="fas fa-play"></i></button>
+      <button id="nextBtn"><i class="fas fa-forward"></i></button>
+    </div>
+  </div>
+  <audio id="music"></audio>
+
+  <script>
+    const enterButton = document.getElementById('enterButton');
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    const glitchContent = document.querySelector('.glitch');
+    const particlesContent = document.getElementById('particles-js');
+
+    enterButton.addEventListener('click', () => {
+      backgroundMusic.play();
+      enterButton.style.display = 'none';
+      glitchContent.classList.remove('hidden-content');
+      particlesContent.classList.remove('hidden-content');
+    });
+
+    // Falling particles
+    const canvas = document.getElementById('fallingParticles');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * -canvas.height;
+        this.velocityY = Math.random() * 1 + 1;
+        this.size = 0;
+        this.character = '⬩';
+        this.color = 'white';
+      }
+      update() {
+        this.y += this.velocityY;
+        if (this.y > canvas.height) {
+          this.y = -this.size;
+          this.x = Math.random() * canvas.width;
+        }
+      }
+      draw() {
+        ctx.font = `${this.size}px 'Courier New', monospace`;
+        ctx.fillStyle = this.color;
+        ctx.fillText(this.character, this.x, this.y);
+      }
     }
-  }
 
-  startBtn.addEventListener('click', () => {
-    startBtn.style.opacity = '0';
-    setTimeout(() => startBtn.style.display = 'none', 500);
-    player.style.display = 'flex';
-    updateTrack();
-  });
-
-  playPauseBtn.addEventListener('click', () => {
-    if(audio.paused) {
-      audio.play();
-      playIcon.style.display = 'none';
-      pauseIcon.style.display = 'block';
-    } else {
-      audio.pause();
-      playIcon.style.display = 'block';
-      pauseIcon.style.display = 'none';
+    const fallingParticles = [];
+    for (let i = 0; i < 25; i++) fallingParticles.push(new Particle());
+    function animateFallingParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      fallingParticles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(animateFallingParticles);
     }
-  });
+    animateFallingParticles();
 
-  nextBtn.addEventListener('click', () => {
-    currentTrack = (currentTrack + 1) % tracks.length;
-    updateTrack();
-  });
+    /* === MUSIC PLAYER SCRIPT === */
+    const songs = [
+      { name: "w7a1z3", src: "https://files.catbox.moe/w7a1z3.mp3" },
+      { name: "8ab7qh", src: "https://files.catbox.moe/8ab7qh.mp3" },
+      { name: "afr3gk", src: "https://files.catbox.moe/afr3gk.mp3" },
+      { name: "ijg9dw", src: "https://files.catbox.moe/ijg9dw.mp3" }
+    ];
 
-  prevBtn.addEventListener('click', () => {
-    currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
-    updateTrack();
-  });
+    let currentSong = 0;
+    const music = document.getElementById("music");
+    const songTitle = document.getElementById("songTitle");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const playerToggle = document.getElementById("playerToggle");
+    const audioPlayer = document.getElementById("audioPlayer");
 
-  audio.addEventListener('ended', () => {
-    currentTrack = (currentTrack + 1) % tracks.length;
-    updateTrack();
-  });
+    function loadSong(index) {
+      currentSong = index;
+      music.src = songs[currentSong].src;
+      songTitle.textContent = songs[currentSong].name;
+      backgroundMusic.pause();
+      music.play();
+      playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    }
 
-  setInterval(() => {
-    document.title = titles[titleIndex];
-    titleIndex = (titleIndex + 1) % titles.length;
-  }, 200);
-</script>
+    playPauseBtn.addEventListener("click", () => {
+      if (!music.src) return;
+      if (music.paused) {
+        music.play();
+        backgroundMusic.pause();
+        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      } else {
+        music.pause();
+        playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+        backgroundMusic.play();
+      }
+    });
 
+    nextBtn.addEventListener("click", () => loadSong((currentSong + 1) % songs.length));
+    prevBtn.addEventListener("click", () => loadSong((currentSong - 1 + songs.length) % songs.length));
+
+    playerToggle.addEventListener("click", () => {
+      audioPlayer.style.display = (audioPlayer.style.display === "none" || audioPlayer.style.display === "") ? "block" : "none";
+    });
+
+    // No auto-loadSong anywhere to prevent overlap
+  </script>
 </body>
 </html>
-
-
-
