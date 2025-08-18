@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loading...</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: #010101;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Courier New", Courier, monospace;
+    overflow: hidden;
+    color: #eee;
+  }
+
+  .overlay {
+    position: absolute;
+    top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 22px;
+    user-select: none;
+    color: #aaa;
+    transition: opacity 0.5s ease;
+  }
+
+  .player {
+    display: none;
+    text-align: center;
+  }
+
+  .controls {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .btn-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    border: 1px solid #222;
+  }
+
+  .btn-circle:hover {
+    transform: scale(1.2);
+    background: #222;
+    box-shadow: 0 0 15px rgba(255,255,255,0.1);
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+    fill: #ccc;
+    transition: fill 0.3s;
+  }
+
+  .btn-circle:hover svg {
+    fill: #fff;
+  }
+
+  audio {
+    display: none;
+  }
+
+  .fade-in {
+    animation: fadeIn 1s ease forwards;
+    opacity: 0;
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="overlay" id="startBtn">Click to Enter</div>
+
+<div class="player fade-in">
+  <audio id="audio"></audio>
+  <div class="controls">
+    <div class="btn-circle" id="prevBtn">
+      <svg viewBox="0 0 24 24">
+        <polygon points="11,12 18,18 18,6"></polygon>
+        <rect x="6" y="6" width="2" height="12"></rect>
+      </svg>
+    </div>
+    <div class="btn-circle" id="playPauseBtn">
+      <svg id="playIcon" viewBox="0 0 24 24">
+        <polygon points="8,5 19,12 8,19"></polygon>
+      </svg>
+      <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;">
+        <rect x="6" y="5" width="4" height="14"></rect>
+        <rect x="14" y="5" width="4" height="14"></rect>
+      </svg>
+    </div>
+    <div class="btn-circle" id="nextBtn">
+      <svg viewBox="0 0 24 24">
+        <polygon points="13,12 6,6 6,18"></polygon>
+        <rect x="16" y="6" width="2" height="12"></rect>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<script>
+  const startBtn = document.getElementById('startBtn');
+  const player = document.querySelector('.player');
+  const audio = document.getElementById('audio');
+  const playPauseBtn = document.getElementById('playPauseBtn');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const playIcon = document.getElementById('playIcon');
+  const pauseIcon = document.getElementById('pauseIcon');
+
+  const tracks = ['song1.mp3','song2.mp3','song3.mp3'];
+  let currentTrack = 0;
+
+  const titles = [":3", "lol", "cared", "nigger", "fag"];
+  let titleIndex = 0;
+
+  function updateTrack(play = true) {
+    audio.src = tracks[currentTrack];
+    if(play) {
+      audio.play();
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'block';
+    } else {
+      playIcon.style.display = 'block';
+      pauseIcon.style.display = 'none';
+    }
+  }
+
+  startBtn.addEventListener('click', () => {
+    startBtn.style.opacity = '0';
+    setTimeout(() => startBtn.style.display = 'none', 500);
+    player.style.display = 'flex';
+    updateTrack();
+  });
+
+  playPauseBtn.addEventListener('click', () => {
+    if(audio.paused) {
+      audio.play();
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'block';
+    } else {
+      audio.pause();
+      playIcon.style.display = 'block';
+      pauseIcon.style.display = 'none';
+    }
+  });
+
+  nextBtn.addEventListener('click', () => {
+    currentTrack = (currentTrack + 1) % tracks.length;
+    updateTrack();
+  });
+
+  prevBtn.addEventListener('click', () => {
+    currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+    updateTrack();
+  });
+
+  audio.addEventListener('ended', () => {
+    currentTrack = (currentTrack + 1) % tracks.length;
+    updateTrack();
+  });
+
+  setInterval(() => {
+    document.title = titles[titleIndex];
+    titleIndex = (titleIndex + 1) % titles.length;
+  }, 200);
+</script>
+
+</body>
+</html>
