@@ -8,26 +8,26 @@
   body {
     margin: 0;
     height: 100vh;
-    background: #010101;
+    background: #000; /* full black */
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: "Courier New", Courier, monospace;
     overflow: hidden;
-    color: #eee;
+    color: #fff; /* full white text */
   }
 
   .overlay {
     position: absolute;
     top:0; left:0; right:0; bottom:0;
-    background: rgba(0,0,0,0.95);
+    background: rgba(0,0,0,1); /* pure black */
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     font-size: 22px;
     user-select: none;
-    color: #aaa;
+    color: #fff; /* white */
     transition: opacity 0.5s ease;
   }
 
@@ -48,31 +48,31 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: #111;
+    background: #000; /* pure black buttons */
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    border: 1px solid #222;
+    border: 1px solid #fff; /* white outline */
   }
 
   .btn-circle:hover {
     transform: scale(1.2);
-    background: #222;
-    box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    background: #111; /* very dark hover */
+    box-shadow: 0 0 15px rgba(255,255,255,0.3);
   }
 
   svg {
     width: 24px;
     height: 24px;
-    fill: #ccc;
+    fill: #fff; /* icons white */
     transition: fill 0.3s;
   }
 
   .btn-circle:hover svg {
-    fill: #fff;
+    fill: #fff; /* stays white */
   }
 
   audio {
@@ -133,15 +133,15 @@
   const tracks = ['song1.mp3','song2.mp3','song3.mp3'];
   let currentTrack = 0;
 
-  const titles = [":3", "lol", "cared", "nigger", "fag"];
+  const titles = [":3", "lol", "cared", "nigger", "$", "fag"];
   let titleIndex = 0;
 
   // Ensure default volume is 0.5
-  audio.volume = 0.5;
+  audio.volume = 0.9;
 
   function updateTrack(play = true) {
     audio.src = tracks[currentTrack];
-    audio.volume = 0.5; // enforce volume each track
+    audio.volume = 0.9;
     if(play) {
       audio.play();
       playIcon.style.display = 'none';
