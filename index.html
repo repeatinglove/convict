@@ -136,8 +136,12 @@
   const titles = [":3", "lol", "cared", "nigger", "fag"];
   let titleIndex = 0;
 
+  // Ensure default volume is 0.5
+  audio.volume = 0.5;
+
   function updateTrack(play = true) {
     audio.src = tracks[currentTrack];
+    audio.volume = 0.5; // enforce volume each track
     if(play) {
       audio.play();
       playIcon.style.display = 'none';
