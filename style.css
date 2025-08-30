@@ -77,7 +77,7 @@ body::after {
 .doll-wrapper {
   position: absolute;
   top: 0%;
-  left: 50%;
+  left: 47%;
   transform: translateX(-50%);
   width: 175px;
   animation: swing 4s ease-in-out infinite, flicker 4s infinite; /* keep flicker */
@@ -122,4 +122,5 @@ body::after {
 
 #enter-screen:hover p {
   opacity: 1;
+
 }
