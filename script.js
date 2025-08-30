@@ -1,10 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const enterScreen = document.getElementById("enter-screen");
   const audio = document.getElementById("bg-audio");
-  const dollWrapper = document.querySelector(".doll-wrapper");
-
-  // Hide doll initially
-  dollWrapper.style.display = "none";
 
   // Cycle tab title fast for a haunted vibe
   const titles = [
@@ -38,4 +34,5 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(() => {
     document.body.style.backgroundColor = Math.random() > 0.985 ? "#111" : "";
   }, 1000);
+
 });
