@@ -74,24 +74,6 @@ body::after {
   }
 }
 
-.doll-wrapper {
-  position: absolute;
-  top: 0%;
-  left: 47%;
-  transform: translateX(-50%);
-  width: 185px;
-  animation: swing 3s ease-in-out infinite, flicker 5s infinite; /* keep flicker */
-  transform-origin: top center;
-  filter: grayscale(100%) contrast(150%) brightness(50%); /* darker, more sad gray */
-  z-index: 5;
-}
-
-.doll {
-  width: 100%;
-  display: block;
-}
-
-
 @keyframes swing {
   0% { transform: translateX(-50%) rotate(5deg); }
   50% { transform: translateX(-50%) rotate(-5deg); }
@@ -122,4 +104,5 @@ body::after {
 
 #enter-screen:hover p {
   opacity: 1;
+
 }
