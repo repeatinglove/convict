@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>lost</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Boxicons -->
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <!-- External CSS -->
+  <link rel="stylesheet" href="x.css">
+</head>
+
+<body>
+  <div id="enter-overlay">
+    <div id="enter-text">Click to Enter</div>
+  </div>
+
+  <!-- Music -->
+  <audio loop id="background-audio" style="display: none;" crossorigin="anonymous">
+    <source src="x.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="blurred-background-div" data-tilt>
+    <!-- Avatar -->
+    <div class="avatar-wrapper">
+      <div class="avatar-circle">
+        <img src="https://files.catbox.moe/e5mzyz.jpg" alt="User avatar">
+        <img src="x.png" class="avatar-decor" alt="Avatar decoration">
+      </div>
+    </div>
+
+    <!-- Username -->
+    <h1 class="username-glow">guilty</h1>
+
+    <!-- Badges -->
+    <div class="user-badges-container-parent">
+      <div class="user-badge"><i class='bx bxs-star'></i></div>
+      <div class="user-badge"><i class='bx bxl-sketch'></i></div>
+      <div class="user-badge"><i class='bx bxs-party'></i></div>
+      <div class="user-badge"><i class='bx bxs-rocket'></i></div>
+      <div class="user-badge"><i class='bx bxs-shield'></i></div>
+      <div class="user-badge"><i class='bx bxs-lightbulb'></i></div>
+    </div>
+
+    <!-- Typed Description -->
+    <p id="typed-description"></p>
+
+    <!-- Social Links -->
+    <div class="social-links">
+      <a href="https://discord.com/users/1050643297527418910" target="_blank"><i class='bx bxl-discord'></i></a>
+      <a href="https://t.me/lostmyguns" target="_blank"><i class='bx bxl-telegram'></i></a>
+      <a href="https://www.youtube.com/@leftwithoutasound" target="_blank"><i class='bx bxl-youtube'></i></a>
+      <a href="https://www.tiktok.com/@leftwithoutaword" target="_blank"><i class='bx bxl-tiktok'></i></a>
+      <a href="https://github.com/gxiltyy" target="_blank"><i class='bx bxl-github'></i></a>
+    </div>
+  </div>
+
+  <!-- External JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tilt.js/1.2.1/tilt.jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11"></script>
+  <script src="x.js"></script>
+</body>
+</html>
