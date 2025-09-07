@@ -1,64 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>lost</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Boxicons -->
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-  <!-- External CSS -->
-  <link rel="stylesheet" href="x.css">
+  <title>Swinging Doll with Glitch Effect</title>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    // Title Switching with Loop
+    const titles = ["guilty", "<3", "wtf", ":3", "lost", "gone", "left"];
+    let titleIndex = 0;
+
+    setInterval(() => {
+        document.title = titles[titleIndex];
+        titleIndex = (titleIndex + 1) % titles.length;
+    }, 100);
+  </script>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background-color: #000;
+    }
+
+    .hidden-content {
+      display: none;
+    }
+
+    .doll {
+      position: absolute;
+      top: -3%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 225px;
+      animation: swing 3s ease-in-out infinite;
+      transform-origin: top center;
+      filter: grayscale(100%) contrast(120%) brightness(80%);
+    }
+
+    @keyframes swing {
+      0% { transform: translateX(-50%) rotate(5deg); }
+      50% { transform: translateX(-50%) rotate(-5deg); }
+      100% { transform: translateX(-50%) rotate(5deg); }
+    }
+
+    /* Styling for the "Click to Enter" Button with glitch effect */
+    #enterButton {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px 40px;
+      background-color: #000; /* Black background */
+      color: #ffffff; /* White text */
+      border: 2px solid #000000;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+      cursor: pointer;
+      text-align: center;
+      box-sizing: border-box;
+      text-transform: uppercase;
+      outline: none;
+      position: relative;
+    }
+
+    #enterButton:hover {
+      background-color: #000000;
+    }
+  </style>
 </head>
-
 <body>
-  <div id="enter-overlay">
-    <div id="enter-text">Click to Enter</div>
+  <!-- Content that will be hidden initially -->
+  <div class="glitch hidden-content">
+    <img src="https://files.catbox.moe/t3g2ot.png" alt="Hanging Doll" class="doll">
   </div>
+  <div id="particles-js" class="hidden-content"></div>
 
-  <!-- Music -->
-  <audio loop id="background-audio" style="display: none;" crossorigin="anonymous">
-    <source src="x.mp3" type="audio/mpeg">
+  <!-- Background Music -->
+  <audio id="backgroundMusic" loop>
+    <source src="https://files.catbox.moe/76gay5.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
   </audio>
 
-  <div class="blurred-background-div" data-tilt>
-    <!-- Avatar -->
-    <div class="avatar-wrapper">
-      <div class="avatar-circle">
-        <img src="https://files.catbox.moe/e5mzyz.jpg" alt="User avatar">
-        <img src="x.png" class="avatar-decor" alt="Avatar decoration">
-      </div>
-    </div>
+  <!-- Click to Enter Button with Glitch Effect -->
+  <button id="enterButton" class="glitch">Click to Enter</button>
 
-    <!-- Username -->
-    <h1 class="username-glow">guilty</h1>
+  <script>
+    const enterButton = document.getElementById('enterButton');
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    const glitchContent = document.querySelector('.glitch');
+    const particlesContent = document.getElementById('particles-js');
 
-    <!-- Badges -->
-    <div class="user-badges-container-parent">
-      <div class="user-badge"><i class='bx bxs-star'></i></div>
-      <div class="user-badge"><i class='bx bxl-sketch'></i></div>
-      <div class="user-badge"><i class='bx bxs-party'></i></div>
-      <div class="user-badge"><i class='bx bxs-rocket'></i></div>
-      <div class="user-badge"><i class='bx bxs-shield'></i></div>
-      <div class="user-badge"><i class='bx bxs-lightbulb'></i></div>
-    </div>
+    // Set background music volume
+    backgroundMusic.volume = 0.25;
 
-    <!-- Typed Description -->
-    <p id="typed-description"></p>
+    enterButton.addEventListener('click', () => {
+      backgroundMusic.play();
+      enterButton.style.display = 'none';
+      glitchContent.classList.remove('hidden-content');
+      particlesContent.classList.remove('hidden-content');
+    });
 
-    <!-- Social Links -->
-    <div class="social-links">
-      <a href="https://discord.com/users/1050643297527418910" target="_blank"><i class='bx bxl-discord'></i></a>
-      <a href="https://t.me/lostmyguns" target="_blank"><i class='bx bxl-telegram'></i></a>
-      <a href="https://www.youtube.com/@leftwithoutasound" target="_blank"><i class='bx bxl-youtube'></i></a>
-      <a href="https://www.tiktok.com/@leftwithoutaword" target="_blank"><i class='bx bxl-tiktok'></i></a>
-      <a href="https://github.com/gxiltyy" target="_blank"><i class='bx bxl-github'></i></a>
-    </div>
-  </div>
+    // Canvas setup for falling particles
+    const canvas = document.getElementById('fallingParticles');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-  <!-- External JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tilt.js/1.2.1/tilt.jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11"></script>
-  <script src="x.js"></script>
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * -canvas.height;
+            this.velocityY = Math.random() * 1 + 1;
+            this.size = 8;
+            this.character = '⬩';
+            this.color = 'white';
+        }
+
+        update() {
+            this.y += this.velocityY;
+            if (this.y > canvas.height) {
+                this.y = -this.size;
+                this.x = Math.random() * canvas.width;
+            }
+        }
+
+        draw() {
+            ctx.font = `${this.size}px Arial`;
+            ctx.fillStyle = this.color;
+            ctx.fillText(this.character, this.x, this.y);
+        }
+    }
+
+    const fallingParticles = [];
+    for (let i = 0; i < 25; i++) {
+        fallingParticles.push(new Particle());
+    }
+
+    function animateFallingParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        fallingParticles.forEach(particle => {
+            particle.update();
+            particle.draw();
+        });
+        requestAnimationFrame(animateFallingParticles);
+    }
+
+    animateFallingParticles();
+  </script>
 </body>
 </html>
